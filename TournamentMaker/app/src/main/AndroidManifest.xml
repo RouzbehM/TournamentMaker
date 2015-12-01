@@ -20,6 +20,22 @@
             android:name=".AddPlayerActivity"
             android:label="@string/title_activity_add_player" >
         </activity>
+        <activity
+            android:name=".AddTournament"
+            android:label="@string/title_activity_add_tournament" >
+        </activity>
+        <activity
+            android:name=".About"
+            android:label="@string/title_activity_about" >
+        </activity>
+        <activity
+            android:name=".EnterMatchResults"
+            android:label="@string/title_activity_enter_match_results" >
+        </activity>
+        <activity
+            android:name=".ViewTeams"
+            android:label="@string/title_activity_view_teams" >
+        </activity>
     </application>
 
 </manifest>

@@ -1,0 +1,103 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="0dp"
+    android:paddingRight="0dp"
+    android:paddingTop="0dp"
+    android:orientation="vertical"
+    android:paddingBottom="0dp"
+    tools:context="geeks.tournamentmaker.AddTournament">
+    android:background="#f2f2f2"
+    android:weightSum="1">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="53dp"
+        android:background="#ccffff">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Create New Tournament"
+            android:id="@+id/ActivityName"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_vertical|center_horizontal"
+            android:textColor="#4d1300"
+            android:textSize="20dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="62dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="90dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Please Enter the Tournament Name"
+            android:id="@+id/Message1"
+            android:layout_gravity="center_horizontal|left"
+            android:gravity="center_vertical|center_horizontal|left"
+            android:textColor="#000000 " />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:weightSum="1">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/Message1Box"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="2.25"
+            android:hint="Tournament Name" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        android:layout_weight="0.05">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Please Select The Tournament Type"
+            android:id="@+id/Message2"
+            android:layout_gravity="center_horizontal|left"
+            android:textColor="#000000 "
+            android:gravity="center_vertical|center_horizontal" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="63dp">
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/TournamentTypes" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="315dp">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" Create Tournament"
+            android:id="@+id/CreateBtn"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="92dp" />
+    </RelativeLayout>
+
+</LinearLayout>
