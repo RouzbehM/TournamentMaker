@@ -11,6 +11,7 @@ public final class TournamentContract {
         public static final String TABLE_NAME = "tournaments";
         public static final String COLUMN_NAME_NAME = "name";
         public static final String COLUMN_NAME_STATUS = "status";
+        public static final String COLUMN_NAME_TYPE = "type";
     }
     public static abstract class MatchEntry implements BaseColumns{
         public static final String TABLE_NAME = "matches";

@@ -1,5 +1,6 @@
 package geeks.tournamentmaker;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -17,6 +18,8 @@ public class AddTeamActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_team);
+        Intent intent = getIntent();
+        int tournamentID = intent.getIntExtra("tournamentID",-1);
         dbHelper = new TournamentDBHelper(this);
     }
 
