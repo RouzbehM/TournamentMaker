@@ -1,18 +1,23 @@
 package geeks.tournamentmaker;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 
-public class AddPlayerActivity extends ActionBarActivity {
+public class AddTeamActivity extends AppCompatActivity {
+
+    private TournamentDBHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_player);
+        setContentView(R.layout.activity_add_team);
+        dbHelper = new TournamentDBHelper(this);
     }
 
     @Override
@@ -44,6 +49,8 @@ public class AddPlayerActivity extends ActionBarActivity {
     public void removeTeam(View view){
         ListView teamList = (ListView)view.findViewById(R.id.teamList);
         teamList.removeView(teamList.getSelectedView());
+        //disable the remove button
+        view.setEnabled(false);
     }
 
     public void startTournament(View view){

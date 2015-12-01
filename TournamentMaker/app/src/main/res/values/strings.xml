@@ -9,4 +9,5 @@
     <string name="title_activity_about">About</string>
     <string name="title_activity_enter_match_results">EnterMatchResults</string>
     <string name="title_activity_view_teams">ViewTeams</string>
+    <string name="title_activity_view_tournament">View Tournament</string>
 </resources>

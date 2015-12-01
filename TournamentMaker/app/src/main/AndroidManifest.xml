@@ -17,24 +17,48 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AddPlayerActivity"
-            android:label="@string/title_activity_add_player" >
+            android:name=".AddTeamActivity"
+            android:label="@string/title_activity_add_player"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="geeks.tournamentmaker.MainActivity" />
         </activity>
         <activity
             android:name=".AddTournament"
-            android:label="@string/title_activity_add_tournament" >
+            android:label="@string/title_activity_add_tournament"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="geeks.tournamentmaker.MainActivity" />
         </activity>
         <activity
             android:name=".About"
-            android:label="@string/title_activity_about" >
+            android:label="@string/title_activity_about">
         </activity>
         <activity
             android:name=".EnterMatchResults"
-            android:label="@string/title_activity_enter_match_results" >
+            android:label="@string/title_activity_enter_match_results"
+            android:parentActivityName=".ViewTournament">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="geeks.tournamentmaker.ViewTournament" />
         </activity>
         <activity
             android:name=".ViewTeams"
-            android:label="@string/title_activity_view_teams" >
+            android:label="@string/title_activity_view_teams"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="geeks.tournamentmaker.MainActivity" />
+        </activity>
+        <activity
+            android:name=".ViewTournament"
+            android:label="@string/title_activity_view_tournament"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="geeks.tournamentmaker.MainActivity" />
         </activity>
     </application>
 
