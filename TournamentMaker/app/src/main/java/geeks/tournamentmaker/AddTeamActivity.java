@@ -17,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -33,6 +34,7 @@ public class AddTeamActivity extends AppCompatActivity {
     private ArrayList<String> teams;
     private ArrayAdapter<String> adapter;
     private int tournamentID;
+    private int selectedPosition;
     private String tournamentType;
 
     @Override
@@ -42,17 +44,19 @@ public class AddTeamActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         teamList = (ListView)findViewById(R.id.teamList);
-        teamList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                if(teamList.getSelectedItem()!=null)
-                    setRemoveButtonEnabled(true);
-            }
-        });
+
         teams = new ArrayList<>();
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,R.layout.simple_list_item,teams);
+        adapter = new ArrayAdapter<>(this,R.layout.simple_list_item,teams);
         teamList.setAdapter(adapter);
 
+        teamList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long arg3) {
+                selectedPosition=position;
+                setRemoveButtonEnabled(true);
+            }
+        });
         Intent intent = getIntent();
         tournamentID = intent.getIntExtra("tournamentID",-1);
         tournamentType = intent.getStringExtra("type");
@@ -106,7 +110,7 @@ public class AddTeamActivity extends AppCompatActivity {
         values.put(TournamentContract.TournamentEntry.COLUMN_NAME_TEAMS, teamsArray);
 
 // Which row to update, based on the ID
-        String selection = TournamentContract.TournamentEntry._ID + " LIKE ?";
+        String selection = TournamentContract.TournamentEntry._ID + " = ?";
         String[] selectionArgs = {tournamentID + ""};
 
         db.update(
@@ -150,7 +154,8 @@ public class AddTeamActivity extends AppCompatActivity {
     }
 
     public void removeTeam(View view) {
-        removeTeam(teamList.getSelectedItemPosition());
+        removeTeam(teams.get(selectedPosition));
+        saveTeams();
         setRemoveButtonEnabled(false);
     }
 
@@ -158,7 +163,7 @@ public class AddTeamActivity extends AppCompatActivity {
         if(teams.size()>1) {
             SQLiteDatabase db = dbHelper.getReadableDatabase();
             ContentValues values = new ContentValues();
-            values.put(TournamentContract.TournamentEntry.COLUMN_NAME_STATUS, "started");
+            values.put(TournamentContract.TournamentEntry.COLUMN_NAME_STATUS, Tournament.STARTED);
 
 // Which row to update, based on the ID
             String selection = TournamentContract.TournamentEntry._ID + "=?";
@@ -184,14 +189,14 @@ public class AddTeamActivity extends AppCompatActivity {
     private void generateMatches(){
         ArrayList<Match> matches = new ArrayList<>();
         //create matches
-        if(tournamentType.equals("round robin")){
+        if(tournamentType.equals(Tournament.ROUND_ROBIN)){
             //generate all matches
             for(int i = 0; i < teams.size()-1; i++){
                 for(int j = i + 1; j < teams.size(); j++){
                     matches.add(new Match(teams.get(i),teams.get(j)));
                 }
             }
-        }else if(tournamentType.equals("knock out")){
+        }else if(tournamentType.equals(Tournament.KNOCK_OUT)){
             //add byes until power of 2 is reached
             int targetSize = getNextTwoPower(teams.size());
             while(teams.size()<targetSize){
@@ -203,7 +208,7 @@ public class AddTeamActivity extends AppCompatActivity {
             for(int i = 0; i<teams.size();i+=2){
                 matches.add(new Match(teams.get(i),teams.get(i+1)));
             }
-        }else if(tournamentType.equals("combination")){
+        }else if(tournamentType.equals(Tournament.COMBINATION)){
             //too complicated
             //let user create matches manually
         }
@@ -226,7 +231,7 @@ public class AddTeamActivity extends AppCompatActivity {
     }
 
     private int getNextTwoPower(int num){
-        double y = Math.floor(Math.log(num)/Math.log(2));
+        double y = Math.floor(Math.log(num) / Math.log(2));
         return (int)Math.pow(2, y + 1);
     }
 
@@ -243,29 +248,34 @@ public class AddTeamActivity extends AppCompatActivity {
                 null,                                     // don't filter by row groups
                 null
         );
-        c.moveToFirst();
-        try {
-            JSONObject json = new JSONObject(
-                    c.getString(c.getColumnIndexOrThrow(TournamentContract.TournamentEntry._ID)));
-            JSONArray teamsArray = json.optJSONArray("teams");
-            for(int i = 0; i < teamsArray.length(); i++) {
-                addTeam(teamsArray.getString(i));
-            }
+        if(c.moveToFirst()) {
+            try {
+                String teamString = c.getString(c.getColumnIndex(TournamentContract.TournamentEntry.COLUMN_NAME_TEAMS));
+                if(teamString!=null) {
+                    JSONObject json = new JSONObject(teamString);
+                    JSONArray teamsArray = json.optJSONArray("teams");
+                    for (int i = 0; i < teamsArray.length(); i++) {
+                        addTeam(teamsArray.getString(i));
+                    }
+                }
 
-        }catch(JSONException e){
-            e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
         db.close();
     }
 
     private void addTeam(String team) {
         adapter.add(team);
-        teams.add(team);
+        if(teams.size()>1)
+            findViewById(R.id.startTournamentButton).setEnabled(true);
     }
 
-    private void removeTeam(int index){
-        adapter.remove(adapter.getItem(index));
-        teams.remove(index);
+    private void removeTeam(String string){
+        adapter.remove(string);
+        if(teams.size()<2)
+            findViewById(R.id.startTournamentButton).setEnabled(false);
     }
 
     private void displayMessage(String message){
@@ -273,7 +283,7 @@ public class AddTeamActivity extends AppCompatActivity {
     }
 
     private void setRemoveButtonEnabled(boolean isEnabled){
-        ((Button)findViewById(R.id.removeButton)).setEnabled(isEnabled);
+        findViewById(R.id.removeButton).setEnabled(isEnabled);
     }
 
 }

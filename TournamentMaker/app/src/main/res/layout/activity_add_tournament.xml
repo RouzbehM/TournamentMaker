@@ -97,7 +97,8 @@
             android:id="@+id/CreateBtn"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="92dp" />
+            android:layout_marginTop="92dp"
+            android:onClick="onClick" />
     </RelativeLayout>
 
 </LinearLayout>

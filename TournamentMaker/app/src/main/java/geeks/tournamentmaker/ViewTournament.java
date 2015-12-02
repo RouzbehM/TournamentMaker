@@ -26,13 +26,13 @@ public class ViewTournament extends ActionBarActivity {
 
         Intent intent = getIntent();
         tournamentID = intent.getIntExtra("tournamentID",-1);
-        tournamentType = intent.getStringExtra("tournamentType");
-        if(tournamentType.equals("combination")){
+        tournamentType = intent.getStringExtra("type");
+        if(tournamentType.equals(Tournament.COMBINATION)){
             removeView(findViewById(R.id.nextRoundButton));
-        }else if(tournamentType.equals("round robin")){
+        }else if(tournamentType.equals(Tournament.ROUND_ROBIN)){
             removeView(findViewById(R.id.addMatchButton));
             removeView(findViewById(R.id.nextRoundButton));
-        }else if(tournamentType.equals("knock out")){
+        }else if(tournamentType.equals(Tournament.KNOCK_OUT)){
             removeView(findViewById(R.id.addMatchButton));
         }
     }

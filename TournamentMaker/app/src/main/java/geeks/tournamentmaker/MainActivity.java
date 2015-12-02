@@ -30,43 +30,19 @@ public class MainActivity extends ActionBarActivity {
 
     private TournamentDBHelper dbHelper;
     private ListView tournamentList;
-    private ArrayList<String> tournaments;
-    private ArrayAdapter<String> adapter;
-    private int tournamentID;
-    private String tournamentType;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         tournamentList = (ListView)findViewById(R.id.tournamentView);
-        tournamentList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-
-                if(tournamentList.getSelectedItem()!=null) {
-                    viewTournament(tournamentList.getSelectedItem());
-                }
-            }
-        });
-
-        tournaments = new ArrayList<>();
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,R.layout.simple_list_item,tournaments);
-        tournamentList.setAdapter(adapter);
-
-//        Intent intent = getIntent();
-//        tournamentID = intent.getIntExtra("tournamentID",-1);
-//        tournamentType = intent.getStringExtra("type");
-
         dbHelper = new TournamentDBHelper(this);
 
         loadTournamentList();
     }
 
-    public void createTournament(){
+    public void createTournament(View view){
 
         Intent intent = new Intent(this, AddTournament.class);
         startActivity(intent);
@@ -102,20 +78,8 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void loadTournamentList(){
-
-
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        String[] projection = {TournamentContract.TournamentEntry.COLUMN_NAME_NAME, TournamentContract.TournamentEntry._ID};
-        String[] selectionArgs = {""+tournamentID};
-        Cursor c = db.query(
-                TournamentContract.TournamentEntry.TABLE_NAME,  // The table to query
-                projection,                               // The columns to return
-                "_id = ?" ,                             // The columns for the WHERE clause
-                selectionArgs,                            // The values for the WHERE clause
-                null,                                     // don't group the rows
-                null,                                     // don't filter by row groups
-                null
-        );
+        Cursor c = db.rawQuery("SELECT * FROM " + TournamentContract.TournamentEntry.TABLE_NAME,null);
 
         // Find ListView to populate
         ListView tournamentList = (ListView)findViewById(R.id.tournamentView);
@@ -123,53 +87,6 @@ public class MainActivity extends ActionBarActivity {
         LoadTournamentCursorAdapter loadTournamentAdapter = new LoadTournamentCursorAdapter(this, c, 0);
         // Attach cursor adapter to the ListView
         tournamentList.setAdapter(loadTournamentAdapter);
-
-
-
-        /*
-        c.moveToFirst();
-        if(c!=null){
-            do{
-                for(int i =0; i < c.getColumnCount(); i++){
-
-
-                }
-
-            } while (c.moveToNext());
-        }
-        /*try {
-            JSONObject json = new JSONObject(
-                    c.getString(c.getColumnIndexOrThrow(TournamentContract.TournamentEntry._ID)));
-            JSONArray tournamentsArray = json.optJSONArray("name");
-            for(int i = 0; i < tournamentsArray.length(); i++) {
-                addTournament(tournamentsArray.getString(i));
-            }
-
-        }catch(JSONException e){
-            e.printStackTrace();
-
-
-        db.close();
-        */
-    }
-
-    public void viewTournament(Object selected){
-        Intent intent = new Intent(this, ViewTournament.class);
-        intent.putExtra("selected",(String)selected);
-        startActivity(intent);
-    }
-    private void addTournament(String team) {
-        adapter.add(team);
-        tournaments.add(team);
-    }
-
-    private void removeTournament(int index){
-        adapter.remove(adapter.getItem(index));
-        tournaments.remove(index);
-    }
-
-    private void displayMessage(String message){
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 }
  class LoadTournamentCursorAdapter extends CursorAdapter{
@@ -187,12 +104,26 @@ public class MainActivity extends ActionBarActivity {
      public void bindView(View view, Context context, Cursor cursor) {
          // Find fields to populate in inflated template
          TextView tournamentList = (TextView) view.findViewById(R.id.list_item_text);
-
          // Extract properties from cursor
-         String body = cursor.getString(cursor.getColumnIndexOrThrow("List"));
-
+         String body = cursor.getString(cursor.getColumnIndexOrThrow(TournamentContract.TournamentEntry.COLUMN_NAME_NAME));
+         final int tournamentID = cursor.getInt(cursor.getColumnIndex(TournamentContract.TournamentEntry._ID));
+         final String status = cursor.getString(cursor.getColumnIndex(TournamentContract.TournamentEntry.COLUMN_NAME_STATUS));
+         final String type = cursor.getString(cursor.getColumnIndex(TournamentContract.TournamentEntry.COLUMN_NAME_TYPE));
          // Populate fields with extracted properties
          tournamentList.setText(body);
+         tournamentList.setOnClickListener(new View.OnClickListener(){
+             public void onClick(View view){
+                 Intent intent = new Intent();
+                 if(status.equals(Tournament.STARTED)) {
+                     intent = new Intent(view.getContext(), ViewTournament.class);
+                 }else if(status.equals(Tournament.NOT_STARTED)){
+                     intent = new Intent(view.getContext(), AddTeamActivity.class);
+                 }
+                 intent.putExtra("tournamentID", tournamentID);
+                 intent.putExtra("type",type);
+                 view.getContext().startActivity(intent);
+             }
+         });
 
      }
 

@@ -15,23 +15,22 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import geeks.tournamentmaker.AddTeamActivity;
-import geeks.tournamentmaker.R;
-import geeks.tournamentmaker.TournamentContract;
-import geeks.tournamentmaker.TournamentDBHelper;
-
 class Tournament{
     String tournamentname;
     String tournamentstatus;
     String tournamenttype;
 
-    public static final String STATE1 = "NOT STARTED";
+    public static final String NOT_STARTED = "NOT STARTED";
+    public static final String STARTED = "STARTED";
+    public static final String ROUND_ROBIN = "Round Robin";
+    public static final String KNOCK_OUT = "Knock Out";
+    public static final String COMBINATION = "Combination";
 
     public Tournament(String tournamentname, String tournamenttype)
     {
         this.tournamentname = tournamentname;
         this.tournamenttype = tournamenttype;
-        this.tournamentstatus = STATE1;
+        this.tournamentstatus = NOT_STARTED;
     }
 
     public void setStatus(String status)
@@ -79,19 +78,13 @@ public class AddTournament extends ActionBarActivity {
         create  = (Button)findViewById(R.id.CreateBtn);
         typespinner = (Spinner)findViewById(R.id.TournamentTypes);
 
-        String[] myItems = {"Knock Out", "Round Robin","Combination"};
+        String[] myItems = {Tournament.KNOCK_OUT, Tournament.ROUND_ROBIN,Tournament.COMBINATION};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, myItems);
         typespinner.setAdapter(adapter);
-
-        create.setOnClickListener((View.OnClickListener) AddTournament.this);
-
     }
 
     public void onClick(View v)
     {
-
-        if (v == create)
-        {
             EditText tournamentname = (EditText)findViewById(R.id.Message1Box);
             String name = tournamentname.getText().toString();
             String type = typespinner.getSelectedItem().toString();
@@ -116,7 +109,9 @@ public class AddTournament extends ActionBarActivity {
 
 
                 Intent myIntent = new Intent(AddTournament.this, AddTeamActivity.class);
-                AddTournament.this.startActivity(myIntent);
+                myIntent.putExtra("tournamentID",(int)newRowId);
+                myIntent.putExtra("type",aTournament.getTournamenttype());
+                startActivity(myIntent);
             }
             else
             {
@@ -127,8 +122,6 @@ public class AddTournament extends ActionBarActivity {
                 Toast toast = Toast.makeText(context, text, duration);
                 toast.show();
             }
-        }
-        return;
 
     }
 
