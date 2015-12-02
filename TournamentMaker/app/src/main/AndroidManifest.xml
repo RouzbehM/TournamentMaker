@@ -69,7 +69,13 @@
         </activity>
         <activity
             android:name=".ViewHelp"
-            android:label="@string/title_activity_view_help"></activity>
+            android:label="@string/title_activity_view_help" />
+        <activity android:name=".help.AddTournaments" />
+        <activity android:name=".help.RemoveTournament" />
+        <activity android:name=".help.ViewStandings" />
+        <activity android:name=".help.ViewTeams" />
+        <activity android:name=".help.ViewAddResults" />
+        <activity android:name=".help.ViewResults"></activity>
     </application>
 
 </manifest>

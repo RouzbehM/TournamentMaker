@@ -13,4 +13,7 @@
     <string name="title_activity_view_standings">View Standings</string>
     <string name="title_activity_add_match">Add Match</string>
     <string name="title_activity_view_help">Help</string>
+    <string name="title_activity_add_tournaments">AddTournaments</string>
+    <string name="title_activity_remove_teams">RemoveTeams</string>
+    <string name="title_activity_remove_tournaments">RemoveTournaments</string>
 </resources>
