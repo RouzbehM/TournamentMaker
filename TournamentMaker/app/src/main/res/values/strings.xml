@@ -10,4 +10,6 @@
     <string name="title_activity_enter_match_results">EnterMatchResults</string>
     <string name="title_activity_view_teams">ViewTeams</string>
     <string name="title_activity_view_tournament">View Tournament</string>
+    <string name="title_activity_view_standings">View Standings</string>
+    <string name="title_activity_add_match">Add Match</string>
 </resources>

@@ -157,7 +157,7 @@ public class AddTeamActivity extends AppCompatActivity {
             values.put(TournamentContract.TournamentEntry.COLUMN_NAME_STATUS, "started");
 
 // Which row to update, based on the ID
-            String selection = TournamentContract.TournamentEntry._ID + " LIKE ?";
+            String selection = TournamentContract.TournamentEntry._ID + "=?";
             String[] selectionArgs = {tournamentID + ""};
 
             db.update(
@@ -233,7 +233,7 @@ public class AddTeamActivity extends AppCompatActivity {
         Cursor c = db.query(
                 TournamentContract.TournamentEntry.TABLE_NAME,  // The table to query
                 projection,                               // The columns to return
-                TournamentContract.TournamentEntry._ID,   // The columns for the WHERE clause
+                TournamentContract.TournamentEntry._ID + "=?",   // The columns for the WHERE clause
                 selectionArgs,                            // The values for the WHERE clause
                 null,                                     // don't group the rows
                 null,                                     // don't filter by row groups
