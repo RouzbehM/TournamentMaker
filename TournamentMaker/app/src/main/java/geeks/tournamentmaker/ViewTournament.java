@@ -2,6 +2,7 @@ package geeks.tournamentmaker;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -41,14 +42,14 @@ public class ViewTournament extends ActionBarActivity {
     }
 
     public void createMatch(View view){
-        Intent intent = new Intent();
-        intent.putExtra("tournamentID",tournamentID);
+        Intent intent = new Intent(this,AddMatchActivity.class);
+        intent.putExtra("tournamentID", tournamentID);
         startActivity(intent);
     }
 
     public void viewStandings(View view){
-        Intent intent = new Intent();
-        intent.putExtra("tournamentID",tournamentID);
+        Intent intent = new Intent(this,AddMatchActivity.class);
+        intent.putExtra("tournamentID", tournamentID);
         startActivity(intent);
     }
 
@@ -79,6 +80,15 @@ public class ViewTournament extends ActionBarActivity {
         db.close();
         Intent intent = new Intent(this,MainActivity.class);
         startActivity(intent);
+    }
+
+    private void loadMatches(){
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Cursor c = db.rawQuery(
+                "SELECT * FROM "+ TournamentContract.MatchEntry.TABLE_NAME +
+                " WHERE " + TournamentContract.MatchEntry.COLUMN_NAME_TOURNAMENT_ID +
+                " = " + tournamentID,null);
+
     }
 
     public void generateNextRound(View view){
