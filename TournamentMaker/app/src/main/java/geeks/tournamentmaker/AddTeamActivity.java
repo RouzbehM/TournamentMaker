@@ -24,6 +24,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class AddTeamActivity extends AppCompatActivity {
 
@@ -32,6 +33,7 @@ public class AddTeamActivity extends AppCompatActivity {
     private ArrayList<String> teams;
     private ArrayAdapter<String> adapter;
     private int tournamentID;
+    private String tournamentType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,7 @@ public class AddTeamActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         tournamentID = intent.getIntExtra("tournamentID",-1);
+        tournamentType = intent.getStringExtra("type");
 
         dbHelper = new TournamentDBHelper(this);
 
@@ -147,30 +150,79 @@ public class AddTeamActivity extends AppCompatActivity {
     }
 
     public void startTournament(View view){
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(TournamentContract.TournamentEntry.COLUMN_NAME_STATUS, "started");
+        if(teams.size()>1) {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            ContentValues values = new ContentValues();
+            values.put(TournamentContract.TournamentEntry.COLUMN_NAME_STATUS, "started");
 
 // Which row to update, based on the ID
-        String selection = TournamentContract.TournamentEntry._ID + " LIKE ?";
-        String[] selectionArgs = { tournamentID+"" };
+            String selection = TournamentContract.TournamentEntry._ID + " LIKE ?";
+            String[] selectionArgs = {tournamentID + ""};
 
-        db.update(
-                TournamentContract.TournamentEntry.TABLE_NAME,
-                values,
-                selection,
-                selectionArgs);
-        db.close();
+            db.update(
+                    TournamentContract.TournamentEntry.TABLE_NAME,
+                    values,
+                    selection,
+                    selectionArgs);
+            db.close();
 
-        generateMatches();
+            generateMatches();
 
-        Intent intent = new Intent(this, ViewTournament.class);
-        intent.putExtra("tournamentID",tournamentID);
-        startActivity(intent);
+            Intent intent = new Intent(this, ViewTournament.class);
+            intent.putExtra("tournamentID", tournamentID);
+            startActivity(intent);
+        }else{
+            displayMessage("You must have at least 2 teams to start a tournament");
+        }
     }
 
     private void generateMatches(){
+        ArrayList<Match> matches = new ArrayList<>();
+        //create matches
+        if(tournamentType.equals("round robin")){
+            //generate all matches
+            for(int i = 0; i < teams.size()-1; i++){
+                for(int j = i + 1; j < teams.size(); j++){
+                    matches.add(new Match(teams.get(i),teams.get(j)));
+                }
+            }
+        }else if(tournamentType.equals("knock out")){
+            //add byes until power of 2 is reached
+            int targetSize = getNextTwoPower(teams.size());
+            while(teams.size()<targetSize){
+                teams.add("BYE");
+            }
+            //randomize team order
+            Collections.shuffle(teams);
+            //generate first round of matches
+            for(int i = 0; i<teams.size();i+=2){
+                matches.add(new Match(teams.get(i),teams.get(i+1)));
+            }
+        }else if(tournamentType.equals("combination")){
+            //too complicated
+            //let user create matches manually
+        }
+        //randomize match order
+        Collections.shuffle(matches);
+        //add matches to database
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        for(Match match: matches){
+            ContentValues values = new ContentValues();
+            values.put(TournamentContract.MatchEntry.COLUMN_NAME_TOURNAMENT_ID, tournamentID);
+            values.put(TournamentContract.MatchEntry.COLUMN_NAME_TEAM1, match.getTeam1());
+            values.put(TournamentContract.MatchEntry.COLUMN_NAME_TEAM2, match.getTeam2());
 
+            db.insert(
+                    TournamentContract.MatchEntry.TABLE_NAME,
+                    null,
+                    values);
+        }
+        db.close();
+    }
+
+    private int getNextTwoPower(int num){
+        double y = Math.floor(Math.log(num)/Math.log(2));
+        return (int)Math.pow(2, y + 1);
     }
 
     private void loadTeamList(){
