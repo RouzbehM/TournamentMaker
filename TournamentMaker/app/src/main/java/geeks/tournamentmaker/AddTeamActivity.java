@@ -1,18 +1,23 @@
 package geeks.tournamentmaker;
 
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,8 +39,15 @@ public class AddTeamActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_team);
 
         teamList = (ListView)findViewById(R.id.teamList);
-        teams = new ArrayList<String>();
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,R.layout.activity_add_team,teams);
+        teamList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                if(teamList.getSelectedItem()!=null)
+                    setRemoveButtonEnabled(true);
+            }
+        });
+        teams = new ArrayList<>();
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,R.layout.simple_list_item,teams);
         teamList.setAdapter(adapter);
 
         Intent intent = getIntent();
@@ -69,13 +81,69 @@ public class AddTeamActivity extends AppCompatActivity {
     }
 
     public void addTeam(View view){
-
+        getTeamFromUser();
+        saveTeams();
     }
 
-    public void removeTeam(View view){
-        teamList.removeView(teamList.getSelectedView());
-        //disable the remove button
-        view.setEnabled(false);
+    private void saveTeams(){
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        ContentValues values = new ContentValues();
+        JSONObject jsonTeams = new JSONObject();
+        try {
+            jsonTeams.put("teams", new JSONArray(teams));
+        }catch(JSONException e){
+            e.printStackTrace();
+        }
+        String teamsArray = jsonTeams.toString();
+        values.put(TournamentContract.TournamentEntry.COLUMN_NAME_TEAMS, teamsArray);
+
+// Which row to update, based on the ID
+        String selection = TournamentContract.TournamentEntry._ID + " LIKE ?";
+        String[] selectionArgs = { tournamentID+"" };
+
+        db.update(
+                TournamentContract.TournamentEntry.TABLE_NAME,
+                values,
+                selection,
+                selectionArgs);
+        db.close();
+    }
+
+    private void getTeamFromUser(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Enter a new team");
+
+// Set up the input
+        final EditText input = new EditText(this);
+        builder.setView(input);
+
+// Set up the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String teamName = input.getText().toString();
+                if(!teams.contains(teamName)) {
+                    addTeam(teamName);
+                    dialog.dismiss();
+                }else{
+                    displayMessage("That team name is already added.");
+                }
+
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
+    public void removeTeam(View view) {
+        removeTeam(teamList.getSelectedItemPosition());
+        setRemoveButtonEnabled(false);
     }
 
     public void startTournament(View view){
@@ -123,15 +191,32 @@ public class AddTeamActivity extends AppCompatActivity {
             JSONObject json = new JSONObject(
                     c.getString(c.getColumnIndexOrThrow(TournamentContract.TournamentEntry._ID)));
             JSONArray teamsArray = json.optJSONArray("teams");
-            for(int i = 0; i < teamsArray.length(); i++){
-                adapter.add(teamsArray.getString(i));
+            for(int i = 0; i < teamsArray.length(); i++) {
+                addTeam(teamsArray.getString(i));
             }
 
         }catch(JSONException e){
             e.printStackTrace();
         }
         db.close();
+    }
 
+    private void addTeam(String team) {
+        adapter.add(team);
+        teams.add(team);
+    }
+
+    private void removeTeam(int index){
+        adapter.remove(adapter.getItem(index));
+        teams.remove(index);
+    }
+
+    private void displayMessage(String message){
+        Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
+    }
+
+    private void setRemoveButtonEnabled(boolean isEnabled){
+        ((Button)findViewById(R.id.removeButton)).setEnabled(isEnabled);
     }
 
 }
