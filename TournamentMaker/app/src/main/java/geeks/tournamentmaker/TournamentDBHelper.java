@@ -18,7 +18,8 @@ public class TournamentDBHelper extends SQLiteOpenHelper {
             TournamentContract.TournamentEntry._ID + " INTEGER PRIMARY KEY," +
             TournamentContract.TournamentEntry.COLUMN_NAME_NAME + TEXT_TYPE + COMMA_SEP +
             TournamentContract.TournamentEntry.COLUMN_NAME_STATUS + TEXT_TYPE + COMMA_SEP +
-            TournamentContract.TournamentEntry.COLUMN_NAME_TYPE + TEXT_TYPE +
+            TournamentContract.TournamentEntry.COLUMN_NAME_TYPE + TEXT_TYPE + COMMA_SEP +
+            TournamentContract.TournamentEntry.COLUMN_NAME_TEAMS + TEXT_TYPE +
         " )/" +
 
         "CREATE TABLE " + TournamentContract.TeamEntry.TABLE_NAME + " (" +
@@ -32,7 +33,7 @@ public class TournamentDBHelper extends SQLiteOpenHelper {
             TournamentContract.MatchEntry.COLUMN_NAME_SCORE1 + TEXT_TYPE + COMMA_SEP +
             TournamentContract.MatchEntry.COLUMN_NAME_SCORE2 + TEXT_TYPE + COMMA_SEP +
             TournamentContract.MatchEntry.COLUMN_NAME_TEAM1 + TEXT_TYPE + COMMA_SEP +
-            TournamentContract.MatchEntry.COLUMN_NAME_TEAM2 + TEXT_TYPE + 
+            TournamentContract.MatchEntry.COLUMN_NAME_TEAM2 + TEXT_TYPE +
         " )";
 
     private static final String SQL_DELETE_ENTRIES =

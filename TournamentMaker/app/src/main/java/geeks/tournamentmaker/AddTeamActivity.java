@@ -1,6 +1,8 @@
 package geeks.tournamentmaker;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -13,14 +15,22 @@ import android.widget.ListView;
 public class AddTeamActivity extends AppCompatActivity {
 
     private TournamentDBHelper dbHelper;
+    ListView teamList;
+    private int tournamentID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_team);
+
+        teamList = (ListView)findViewById(R.id.teamList);
+
         Intent intent = getIntent();
-        int tournamentID = intent.getIntExtra("tournamentID",-1);
+        tournamentID = intent.getIntExtra("tournamentID",-1);
+
         dbHelper = new TournamentDBHelper(this);
+
+        loadTeamList();
     }
 
     @Override
@@ -50,7 +60,6 @@ public class AddTeamActivity extends AppCompatActivity {
     }
 
     public void removeTeam(View view){
-        ListView teamList = (ListView)view.findViewById(R.id.teamList);
         teamList.removeView(teamList.getSelectedView());
         //disable the remove button
         view.setEnabled(false);
@@ -58,6 +67,21 @@ public class AddTeamActivity extends AppCompatActivity {
 
     public void startTournament(View view){
 
+    }
+
+    private void loadTeamList(){
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String[] projection = {TournamentContract.TournamentEntry.COLUMN_NAME_TEAMS};
+        String[] selectionArgs = {""+tournamentID};
+        Cursor c = db.query(
+                TournamentContract.TeamEntry.TABLE_NAME,  // The table to query
+                projection,                               // The columns to return
+                "_ID",                                // The columns for the WHERE clause
+                selectionArgs,                            // The values for the WHERE clause
+                null,                                     // don't group the rows
+                null,                                     // don't filter by row groups
+                null
+        );
     }
 
 }
