@@ -30,6 +30,11 @@ public class EnterMatchResults extends ActionBarActivity {
             ContentValues values = new ContentValues();
             values.put(TournamentContract.MatchEntry.COLUMN_NAME_SCORE1, scoreTeam1);
             values.put(TournamentContract.MatchEntry.COLUMN_NAME_SCORE2, scoreTeam2);
+            if(scoreTeam1 > scoreTeam2){
+                values.put(TournamentContract.MatchEntry.COLUMN_NAME_WINNER, TournamentContract.MatchEntry.COLUMN_NAME_TEAM1);
+            } else {
+                values.put(TournamentContract.MatchEntry.COLUMN_NAME_WINNER, TournamentContract.MatchEntry.COLUMN_NAME_TEAM2);
+            }
 
             String selection = TournamentContract.MatchEntry._ID + " LIKE ?";
             String[] selectionArgs = { matchID+"" };

@@ -96,7 +96,7 @@ public class MainActivity extends ActionBarActivity {
         Cursor c = db.query(
                 TournamentContract.TournamentEntry.TABLE_NAME,  // The table to query
                 projection,                               // The columns to return
-                TournamentContract.TournamentEntry._ID,   // The columns for the WHERE clause
+                "rowid = ?" ,                             // The columns for the WHERE clause
                 selectionArgs,                            // The values for the WHERE clause
                 null,                                     // don't group the rows
                 null,                                     // don't filter by row groups
