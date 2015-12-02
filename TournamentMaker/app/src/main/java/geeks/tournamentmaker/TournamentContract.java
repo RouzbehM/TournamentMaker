@@ -21,6 +21,7 @@ public final class TournamentContract {
         public static final String COLUMN_NAME_TEAM2 = "team2";
         public static final String COLUMN_NAME_SCORE1 = "score1";
         public static final String COLUMN_NAME_SCORE2 = "score2";
+        public static final String COLUMN_NAME_WINNER = "winner";
     }
     public static abstract class TeamEntry implements BaseColumns{
         public static final String TABLE_NAME = "teams";

@@ -39,6 +39,7 @@ public class AddTeamActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_team);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         teamList = (ListView)findViewById(R.id.teamList);
         teamList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -102,7 +103,7 @@ public class AddTeamActivity extends AppCompatActivity {
 
 // Which row to update, based on the ID
         String selection = TournamentContract.TournamentEntry._ID + " LIKE ?";
-        String[] selectionArgs = { tournamentID+"" };
+        String[] selectionArgs = {tournamentID + ""};
 
         db.update(
                 TournamentContract.TournamentEntry.TABLE_NAME,

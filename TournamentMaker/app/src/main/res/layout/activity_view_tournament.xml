@@ -7,4 +7,73 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="geeks.tournamentmaker.ViewTournament">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Matches"
+        android:id="@+id/textView11"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/deleteButton"
+        android:id="@+id/buttons">
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Standings"
+        android:id="@+id/standingsButton"
+        android:layout_above="@+id/deleteButton"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:onClick="viewStandings" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Add Match"
+        android:id="@+id/addMatchButton"
+        android:layout_alignTop="@+id/standingsButton"
+        android:layout_toRightOf="@+id/standingsButton"
+        android:layout_toEndOf="@+id/standingsButton"
+        android:onClick="createMatch" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Next Round"
+        android:id="@+id/nextRoundButton"
+        android:layout_alignTop="@+id/addMatchButton"
+        android:layout_toRightOf="@+id/addMatchButton"
+        android:layout_toEndOf="@+id/addMatchButton"
+        android:onClick="generateNextRound" />
+    </LinearLayout>
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/matchList"
+        android:layout_below="@+id/textView11"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/buttons" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete"
+        android:id="@+id/deleteButton"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/matchList"
+        android:layout_alignEnd="@+id/matchList"
+        android:onClick="deleteTournament" />
 </RelativeLayout>

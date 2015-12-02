@@ -13,27 +13,30 @@ public class TournamentDBHelper extends SQLiteOpenHelper {
 
     private static final String TEXT_TYPE = " TEXT";
     private static final String COMMA_SEP = ",";
-    private static final String SQL_CREATE_ENTRIES =
+    private static final String SQL_CREATE_TOURNAMENT_TABLE =
         "CREATE TABLE " + TournamentContract.TournamentEntry.TABLE_NAME + " (" +
             TournamentContract.TournamentEntry._ID + " INTEGER PRIMARY KEY," +
             TournamentContract.TournamentEntry.COLUMN_NAME_NAME + TEXT_TYPE + COMMA_SEP +
             TournamentContract.TournamentEntry.COLUMN_NAME_STATUS + TEXT_TYPE + COMMA_SEP +
             TournamentContract.TournamentEntry.COLUMN_NAME_TYPE + TEXT_TYPE + COMMA_SEP +
             TournamentContract.TournamentEntry.COLUMN_NAME_TEAMS + TEXT_TYPE +
-        " )/" +
+        " )";
 
+    private static final String SQL_CREATE_TEAM_TABLE =
         "CREATE TABLE " + TournamentContract.TeamEntry.TABLE_NAME + " (" +
             TournamentContract.TeamEntry._ID + " INTEGER PRIMARY KEY," +
             TournamentContract.TeamEntry.COLUMN_NAME_NAME + TEXT_TYPE +
-        " )/" +
+        " )";
 
+    private static final String SQL_CREATE_MATCH_TABLE =
         "CREATE TABLE " + TournamentContract.MatchEntry.TABLE_NAME + " (" +
             TournamentContract.MatchEntry._ID + " INTEGER PRIMARY KEY," +
             TournamentContract.MatchEntry.COLUMN_NAME_TOURNAMENT_ID + TEXT_TYPE + COMMA_SEP +
             TournamentContract.MatchEntry.COLUMN_NAME_SCORE1 + TEXT_TYPE + COMMA_SEP +
             TournamentContract.MatchEntry.COLUMN_NAME_SCORE2 + TEXT_TYPE + COMMA_SEP +
             TournamentContract.MatchEntry.COLUMN_NAME_TEAM1 + TEXT_TYPE + COMMA_SEP +
-            TournamentContract.MatchEntry.COLUMN_NAME_TEAM2 + TEXT_TYPE +
+            TournamentContract.MatchEntry.COLUMN_NAME_TEAM2 + TEXT_TYPE + COMMA_SEP +
+            TournamentContract.MatchEntry.COLUMN_NAME_WINNER + TEXT_TYPE +
         " )";
 
     private static final String SQL_DELETE_ENTRIES =
@@ -45,7 +48,9 @@ public class TournamentDBHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(SQL_CREATE_ENTRIES);
+        db.execSQL(SQL_CREATE_MATCH_TABLE);
+        db.execSQL(SQL_CREATE_TEAM_TABLE);
+        db.execSQL(SQL_CREATE_TOURNAMENT_TABLE);
     }
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // This database is only a cache for online data, so its upgrade policy is
