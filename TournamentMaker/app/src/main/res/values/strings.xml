@@ -12,4 +12,5 @@
     <string name="title_activity_view_tournament">View Tournament</string>
     <string name="title_activity_view_standings">View Standings</string>
     <string name="title_activity_add_match">Add Match</string>
+    <string name="title_activity_view_help">ViewHelp</string>
 </resources>

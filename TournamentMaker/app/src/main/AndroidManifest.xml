@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="geeks.tournamentmaker" >
+    package="geeks.tournamentmaker">
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,7 +19,7 @@
         <activity
             android:name=".AddTeamActivity"
             android:label="@string/title_activity_add_player"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="geeks.tournamentmaker.MainActivity" />
@@ -27,7 +27,7 @@
         <activity
             android:name=".AddTournament"
             android:label="@string/title_activity_add_tournament"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="geeks.tournamentmaker.MainActivity" />
@@ -38,7 +38,7 @@
         <activity
             android:name=".EnterMatchResults"
             android:label="@string/title_activity_enter_match_results"
-            android:parentActivityName=".ViewTournament" >
+            android:parentActivityName=".ViewTournament">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="geeks.tournamentmaker.ViewTournament" />
@@ -46,7 +46,7 @@
         <activity
             android:name=".ViewTournament"
             android:label="@string/title_activity_view_tournament"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="geeks.tournamentmaker.MainActivity" />
@@ -54,7 +54,7 @@
         <activity
             android:name=".ViewStandingsActivity"
             android:label="@string/title_activity_view_standings"
-            android:parentActivityName=".ViewTournament" >
+            android:parentActivityName=".ViewTournament">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="geeks.tournamentmaker.ViewTournament" />
@@ -62,11 +62,14 @@
         <activity
             android:name=".AddMatchActivity"
             android:label="@string/title_activity_add_match"
-            android:parentActivityName=".ViewTournament" >
+            android:parentActivityName=".ViewTournament">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="geeks.tournamentmaker.ViewTournament" />
         </activity>
+        <activity
+            android:name=".ViewHelp"
+            android:label="@string/title_activity_view_help"></activity>
     </application>
 
 </manifest>
