@@ -1,17 +1,22 @@
 package geeks.tournamentmaker;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CursorAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -19,6 +24,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+
 
 public class MainActivity extends ActionBarActivity {
 
@@ -90,20 +96,42 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void loadTournamentList(){
+
+
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        String[] projection = {TournamentContract.TournamentEntry.COLUMN_NAME_NAME};
+        String[] projection = {TournamentContract.TournamentEntry.COLUMN_NAME_NAME, TournamentContract.TournamentEntry._ID};
         String[] selectionArgs = {""+tournamentID};
         Cursor c = db.query(
                 TournamentContract.TournamentEntry.TABLE_NAME,  // The table to query
                 projection,                               // The columns to return
-                "rowid = ?" ,                             // The columns for the WHERE clause
+                "_id = ?" ,                             // The columns for the WHERE clause
                 selectionArgs,                            // The values for the WHERE clause
                 null,                                     // don't group the rows
                 null,                                     // don't filter by row groups
                 null
         );
+
+        // Find ListView to populate
+        ListView tournamentList = (ListView)findViewById(R.id.tournamentView);
+        // Setup cursor adapter using cursor from last step
+        LoadTournamentCursorAdapter loadTournamentAdapter = new LoadTournamentCursorAdapter(this, c, 0);
+        // Attach cursor adapter to the ListView
+        tournamentList.setAdapter(loadTournamentAdapter);
+
+
+
+        /*
         c.moveToFirst();
-        try {
+        if(c!=null){
+            do{
+                for(int i =0; i < c.getColumnCount(); i++){
+
+
+                }
+
+            } while (c.moveToNext());
+        }
+        /*try {
             JSONObject json = new JSONObject(
                     c.getString(c.getColumnIndexOrThrow(TournamentContract.TournamentEntry._ID)));
             JSONArray tournamentsArray = json.optJSONArray("name");
@@ -113,8 +141,10 @@ public class MainActivity extends ActionBarActivity {
 
         }catch(JSONException e){
             e.printStackTrace();
-        }
+
+
         db.close();
+        */
     }
 
     public void viewTournament(Object selected){
@@ -135,4 +165,30 @@ public class MainActivity extends ActionBarActivity {
     private void displayMessage(String message){
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
+}
+ class LoadTournamentCursorAdapter extends CursorAdapter{
+     public LoadTournamentCursorAdapter(Context context, Cursor cursor, int flags) {
+         super(context, cursor, 0);
+     }
+
+     // The newView method is used to inflate a new view and return it,
+     // you don't bind any data to the view at this point.
+     @Override
+     public View newView(Context context, Cursor cursor, ViewGroup parent) {
+         return LayoutInflater.from(context).inflate(R.layout.simple_list_item, parent, false);
+     }
+
+     public void bindView(View view, Context context, Cursor cursor) {
+         // Find fields to populate in inflated template
+         TextView tournamentList = (TextView) view.findViewById(R.id.list_item_text);
+
+         // Extract properties from cursor
+         String body = cursor.getString(cursor.getColumnIndexOrThrow("List"));
+
+         // Populate fields with extracted properties
+         tournamentList.setText(body);
+
+     }
+
+
 }
