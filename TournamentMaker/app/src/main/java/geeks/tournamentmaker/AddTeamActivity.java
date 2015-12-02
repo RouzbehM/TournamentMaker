@@ -1,5 +1,6 @@
 package geeks.tournamentmaker;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -9,13 +10,22 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class AddTeamActivity extends AppCompatActivity {
 
     private TournamentDBHelper dbHelper;
-    ListView teamList;
+    private ListView teamList;
+    private ArrayList<String> teams;
+    private ArrayAdapter<String> adapter;
     private int tournamentID;
 
     @Override
@@ -24,6 +34,9 @@ public class AddTeamActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_team);
 
         teamList = (ListView)findViewById(R.id.teamList);
+        teams = new ArrayList<String>();
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,R.layout.activity_add_team,teams);
+        teamList.setAdapter(adapter);
 
         Intent intent = getIntent();
         tournamentID = intent.getIntExtra("tournamentID",-1);
@@ -66,6 +79,29 @@ public class AddTeamActivity extends AppCompatActivity {
     }
 
     public void startTournament(View view){
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(TournamentContract.TournamentEntry.COLUMN_NAME_STATUS, "started");
+
+// Which row to update, based on the ID
+        String selection = TournamentContract.TournamentEntry._ID + " LIKE ?";
+        String[] selectionArgs = { tournamentID+"" };
+
+        db.update(
+                TournamentContract.TournamentEntry.TABLE_NAME,
+                values,
+                selection,
+                selectionArgs);
+        db.close();
+
+        generateMatches();
+
+        Intent intent = new Intent(this, ViewTournament.class);
+        intent.putExtra("tournamentID",tournamentID);
+        startActivity(intent);
+    }
+
+    private void generateMatches(){
 
     }
 
@@ -74,14 +110,28 @@ public class AddTeamActivity extends AppCompatActivity {
         String[] projection = {TournamentContract.TournamentEntry.COLUMN_NAME_TEAMS};
         String[] selectionArgs = {""+tournamentID};
         Cursor c = db.query(
-                TournamentContract.TeamEntry.TABLE_NAME,  // The table to query
+                TournamentContract.TournamentEntry.TABLE_NAME,  // The table to query
                 projection,                               // The columns to return
-                "_ID",                                // The columns for the WHERE clause
+                TournamentContract.TournamentEntry._ID,   // The columns for the WHERE clause
                 selectionArgs,                            // The values for the WHERE clause
                 null,                                     // don't group the rows
                 null,                                     // don't filter by row groups
                 null
         );
+        c.moveToFirst();
+        try {
+            JSONObject json = new JSONObject(
+                    c.getString(c.getColumnIndexOrThrow(TournamentContract.TournamentEntry._ID)));
+            JSONArray teamsArray = json.optJSONArray("teams");
+            for(int i = 0; i < teamsArray.length(); i++){
+                adapter.add(teamsArray.getString(i));
+            }
+
+        }catch(JSONException e){
+            e.printStackTrace();
+        }
+        db.close();
+
     }
 
 }
