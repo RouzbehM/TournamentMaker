@@ -45,14 +45,6 @@
                 android:value="geeks.tournamentmaker.ViewTournament" />
         </activity>
         <activity
-            android:name=".ViewTeams"
-            android:label="@string/title_activity_view_teams"
-            android:parentActivityName=".MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="geeks.tournamentmaker.MainActivity" />
-        </activity>
-        <activity
             android:name=".ViewTournament"
             android:label="@string/title_activity_view_tournament"
             android:parentActivityName=".MainActivity" >
