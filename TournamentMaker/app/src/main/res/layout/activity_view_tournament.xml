@@ -17,6 +17,18 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete"
+        android:id="@+id/deleteButton"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/matchList"
+        android:layout_alignEnd="@+id/matchList"
+        android:onClick="deleteTournament" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -55,7 +67,7 @@
         android:layout_toEndOf="@+id/addMatchButton"
         android:onClick="generateNextRound" />
     </LinearLayout>
-
+    
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -65,15 +77,4 @@
         android:layout_alignParentStart="true"
         android:layout_above="@+id/buttons" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Delete"
-        android:id="@+id/deleteButton"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/matchList"
-        android:layout_alignEnd="@+id/matchList"
-        android:onClick="deleteTournament" />
 </RelativeLayout>
