@@ -22,7 +22,7 @@
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="geeks.tournamentmaker.MainActivity" />
+                android:value="geeks.tournamentmaker.ViewTournament" />
         </activity>
         <activity
             android:name=".AddTournament"
@@ -34,7 +34,11 @@
         </activity>
         <activity
             android:name=".About"
-            android:label="@string/title_activity_about" />
+            android:label="@string/title_activity_about">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="geeks.tournamentmaker.MainActivity" />
+        </activity>
         <activity
             android:name=".EnterMatchResults"
             android:label="@string/title_activity_enter_match_results"
