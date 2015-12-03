@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ViewStandingsActivity extends ActionBarActivity {
-    private TournamentDBHelper dbHelper;
+    private TournamentDBHelper dbHelper = new TournamentDBHelper(getApplicationContext());
     private ListView standings;
     private ArrayList winners = new ArrayList();
     public String[] sortedwinners;
@@ -34,7 +34,7 @@ public class ViewStandingsActivity extends ActionBarActivity {
         loadStandings();
         standings = (ListView) findViewById(R.id.standingsview);
 
- 
+
         // This is the array adapter, it takes the context of the activity as a
         // first parameter, the type of list view as a second parameter and your
         // array as a third parameter.
