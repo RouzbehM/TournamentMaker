@@ -2,6 +2,7 @@ package geeks.tournamentmaker;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -16,6 +17,8 @@ public class EnterMatchResults extends ActionBarActivity {
     Button submitResults;
     private TournamentDBHelper dbHelper;
     private int matchID;
+    String teamName1;
+    String teamName2;
 
     public void onClick(View v){
         if(v == submitResults) {
@@ -27,17 +30,39 @@ public class EnterMatchResults extends ActionBarActivity {
 
             SQLiteDatabase db = dbHelper.getReadableDatabase();
 
+
+
             ContentValues values = new ContentValues();
+            String[] projection = {TournamentContract.MatchEntry.COLUMN_NAME_TEAM1,
+                    TournamentContract.MatchEntry.COLUMN_NAME_TEAM2
+            };
+            String selection = TournamentContract.MatchEntry._ID + " LIKE ?";
+            String[] selectionArgs = {"" + matchID};
+            Cursor c = db.query(
+                TournamentContract.MatchEntry.TABLE_NAME,
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                null
+            );
+
+            teamName1 = c.getString(0);
+            teamName2 = c.getString(1);
+
+
+
             values.put(TournamentContract.MatchEntry.COLUMN_NAME_SCORE1, scoreTeam1);
             values.put(TournamentContract.MatchEntry.COLUMN_NAME_SCORE2, scoreTeam2);
             if(scoreTeam1 > scoreTeam2){
-                values.put(TournamentContract.MatchEntry.COLUMN_NAME_WINNER, TournamentContract.MatchEntry.COLUMN_NAME_TEAM1);
+                values.put(TournamentContract.MatchEntry.COLUMN_NAME_WINNER, teamName1);
             } else {
-                values.put(TournamentContract.MatchEntry.COLUMN_NAME_WINNER, TournamentContract.MatchEntry.COLUMN_NAME_TEAM2);
+                values.put(TournamentContract.MatchEntry.COLUMN_NAME_WINNER, teamName2);
             }
 
-            String selection = TournamentContract.MatchEntry._ID + " LIKE ?";
-            String[] selectionArgs = { matchID+"" };
+
+
 
             db.update(
                     TournamentContract.MatchEntry.TABLE_NAME,
