@@ -25,8 +25,13 @@ public class EnterMatchResults extends ActionBarActivity {
     String teamName2;
 
     public void onClick(View v){
-        int scoreTeam1 = Integer.parseInt(score1.getText().toString());
-        int scoreTeam2 = Integer.parseInt(score2.getText().toString());
+        String score1Text;
+        String score2Text;
+        score1Text = score1.getText().toString();
+        score2Text = score2.getText().toString();
+        if(!score1Text.equals("")&&!score2Text.equals("")) {
+            int scoreTeam1 = Integer.parseInt(score1Text);
+            int scoreTeam2 = Integer.parseInt(score2Text);
 
             SQLiteDatabase db = dbHelper.getReadableDatabase();
 
@@ -36,7 +41,7 @@ public class EnterMatchResults extends ActionBarActivity {
 
             values.put(TournamentContract.MatchEntry.COLUMN_NAME_SCORE1, scoreTeam1);
             values.put(TournamentContract.MatchEntry.COLUMN_NAME_SCORE2, scoreTeam2);
-            if(scoreTeam1 > scoreTeam2){
+            if (scoreTeam1 > scoreTeam2) {
                 values.put(TournamentContract.MatchEntry.COLUMN_NAME_WINNER, teamName1);
             } else {
                 values.put(TournamentContract.MatchEntry.COLUMN_NAME_WINNER, teamName2);
@@ -51,6 +56,7 @@ public class EnterMatchResults extends ActionBarActivity {
             Intent myIntent = new Intent(this, ViewTournament.class);
             myIntent.putExtra("tournamentID", tournamentID);
             startActivity(myIntent);
+        }
     }
 
 

@@ -86,11 +86,14 @@ public class ViewTournament extends ActionBarActivity {
     }
     private void deleteTournament(){
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        String selection = TournamentContract.TournamentEntry._ID + " LIKE ?";
-// Specify arguments in placeholder order.
+        String selection = TournamentContract.TournamentEntry._ID + " = ?";
         String[] selectionArgs = { tournamentID+"" };
-// Issue SQL statement.
+        String selection2 = TournamentContract.MatchEntry.COLUMN_NAME_TOURNAMENT_ID + " = ?";
+        String[] selectionArgs2 = { tournamentID+"" };
+
         db.delete(TournamentContract.TournamentEntry.TABLE_NAME, selection, selectionArgs);
+        db.delete(TournamentContract.MatchEntry.TABLE_NAME,selection2,selectionArgs2);
+
         db.close();
         Intent intent = new Intent(this,MainActivity.class);
         startActivity(intent);
