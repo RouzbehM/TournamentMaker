@@ -40,6 +40,14 @@ public class ViewHelp extends ActionBarActivity {
         startActivity(intent);
     }
 
+<<<<<<< HEAD
+=======
+    public void viewHelpViewResults(View view){
+        Intent intent = new Intent(this, ViewResults.class);
+        startActivity(intent);
+    }
+
+>>>>>>> origin/master
 
 
 }

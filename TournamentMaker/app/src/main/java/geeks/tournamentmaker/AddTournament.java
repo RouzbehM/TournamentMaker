@@ -3,9 +3,11 @@ package geeks.tournamentmaker;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -79,7 +81,8 @@ public class AddTournament extends ActionBarActivity {
         typespinner = (Spinner)findViewById(R.id.TournamentTypes);
 
         String[] myItems = {Tournament.KNOCK_OUT, Tournament.ROUND_ROBIN,Tournament.COMBINATION};
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, myItems);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, myItems);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         typespinner.setAdapter(adapter);
     }
 
@@ -94,24 +97,48 @@ public class AddTournament extends ActionBarActivity {
                Tournament aTournament = new Tournament(name,type);
 
                 // Gets the data repository in write mode
-                SQLiteDatabase db = mDbHelper.getWritableDatabase();
+                SQLiteDatabase db = mDbHelper.getReadableDatabase();
+                String[] projection = {TournamentContract.TournamentEntry._ID};
+                String[] selectionArgs = {""+name};
+                Cursor c = db.query(
+                        TournamentContract.TournamentEntry.TABLE_NAME,  // The table to query
+                        projection,                               // The columns to return
+                        TournamentContract.TournamentEntry.COLUMN_NAME_NAME + "=?",   // The columns for the WHERE clause
+                        selectionArgs,                            // The values for the WHERE clause
+                        null,                                     // don't group the rows
+                        null,                                     // don't filter by row groups
+                        null
+                );
 
+                if(c.moveToFirst()) {
+                    Context context = this;
+                    CharSequence text = "A tournament with that name already exists!";
+                    int duration = Toast.LENGTH_LONG;
+
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
+                    c.close();
+                }else {
+                    c.close();
+                    db = mDbHelper.getWritableDatabase();
 // Create a new map of values, where column names are the keys
-                ContentValues values = new ContentValues();
-                values.put(TournamentContract.TournamentEntry.COLUMN_NAME_NAME, aTournament.getName());
-                values.put(TournamentContract.TournamentEntry.COLUMN_NAME_STATUS, aTournament.getStatus());
-                values.put(TournamentContract.TournamentEntry.COLUMN_NAME_TYPE, aTournament.getTournamenttype());
+                    ContentValues values = new ContentValues();
+                    values.put(TournamentContract.TournamentEntry.COLUMN_NAME_NAME, aTournament.getName());
+                    values.put(TournamentContract.TournamentEntry.COLUMN_NAME_STATUS, aTournament.getStatus());
+                    values.put(TournamentContract.TournamentEntry.COLUMN_NAME_TYPE, aTournament.getTournamenttype());
 
 // Insert the new row, returning the primary key value of the new row
-                long newRowId;
-                newRowId = db.insert(
-                        TournamentContract.TournamentEntry.TABLE_NAME,null,values);
+                    long newRowId;
+                    newRowId = db.insert(
+                            TournamentContract.TournamentEntry.TABLE_NAME, null, values);
+                    db.close();
 
 
-                Intent myIntent = new Intent(AddTournament.this, AddTeamActivity.class);
-                myIntent.putExtra("tournamentID",(int)newRowId);
-                myIntent.putExtra("type",aTournament.getTournamenttype());
-                startActivity(myIntent);
+                    Intent myIntent = new Intent(AddTournament.this, AddTeamActivity.class);
+                    myIntent.putExtra("tournamentID", (int) newRowId);
+                    myIntent.putExtra("type", aTournament.getTournamenttype());
+                    startActivity(myIntent);
+                }
             }
             else
             {

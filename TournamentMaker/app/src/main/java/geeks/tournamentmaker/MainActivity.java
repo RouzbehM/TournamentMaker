@@ -42,6 +42,11 @@ public class MainActivity extends ActionBarActivity {
         loadTournamentList();
     }
 
+    @Override
+    public void onBackPressed(){
+
+    }
+
     public void createTournament(View view){
 
         Intent intent = new Intent(this, AddTournament.class);

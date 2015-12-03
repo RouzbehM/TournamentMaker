@@ -92,6 +92,12 @@ public class AddTeamActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed(){
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
     public void addTeam(View view){
         getTeamFromUser();
         saveTeams();
@@ -160,6 +166,9 @@ public class AddTeamActivity extends AppCompatActivity {
             return false;
         }else if(name.equals("")){
             displayMessage("Please enter a name.");
+            return false;
+        }else if(name.length()>15){
+            displayMessage("That name is too long!");
             return false;
         }
         return true;
@@ -303,6 +312,38 @@ public class AddTeamActivity extends AppCompatActivity {
 
     private void setRemoveButtonEnabled(boolean isEnabled){
         findViewById(R.id.removeButton).setEnabled(isEnabled);
+    }
+
+    public void deleteTournament(View view){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Deleting tournament");
+        builder.setMessage("Are you sure you want to delete this tournament?");
+// Add the buttons
+        builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                deleteTournament();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+            }
+        });
+        builder.show();
+    }
+    private void deleteTournament(){
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String selection = TournamentContract.TournamentEntry._ID + " = ?";
+        String[] selectionArgs = { tournamentID+"" };
+        String selection2 = TournamentContract.MatchEntry.COLUMN_NAME_TOURNAMENT_ID + " = ?";
+        String[] selectionArgs2 = { tournamentID+"" };
+
+        db.delete(TournamentContract.TournamentEntry.TABLE_NAME, selection, selectionArgs);
+        db.delete(TournamentContract.MatchEntry.TABLE_NAME,selection2,selectionArgs2);
+
+        db.close();
+        Intent intent = new Intent(this,MainActivity.class);
+        startActivity(intent);
     }
 
 }

@@ -13,18 +13,21 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="120dp"
-        android:text="(Home)"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:maxLength="9"
+        android:inputType="number" />
 
     <EditText
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:id="@+id/awayTeamScore"
-        android:text="(Away)"
         android:textAlignment="center"
         android:layout_alignBottom="@+id/homeTeamScore"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:maxLength="9"
+        android:inputType="number"
+        android:layout_alignTop="@+id/textView" />
 
     <TextView
         android:layout_width="100dp"
@@ -45,7 +48,8 @@
         android:id="@+id/submitScores"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="98dp" />
+        android:layout_marginBottom="98dp"
+        android:onClick="onClick" />
 
     <TextView
         android:layout_width="330dp"

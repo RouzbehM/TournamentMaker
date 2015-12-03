@@ -21,7 +21,7 @@
         android:layout_height="433dp"
         android:id="@+id/tournamentView"
         android:layout_gravity="center_horizontal"
-        android:layout_above="@+id/button"
+        android:layout_above="@+id/CreateBtn"
         android:layout_below="@+id/textView11" />
 
     <Button
@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:text="Add Tournament"
         android:onClick="createTournament"
-        android:id="@+id/button"
+        android:id="@+id/CreateBtn"
         android:layout_gravity="center_horizontal"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
