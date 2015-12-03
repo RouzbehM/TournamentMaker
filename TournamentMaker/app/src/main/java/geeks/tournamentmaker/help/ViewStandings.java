@@ -17,6 +17,6 @@ public class ViewStandings extends ActionBarActivity {
 
 
         mImageView = (ImageView) findViewById(R.id.imageView2);
-        mImageView.setImageResource(R.drawable.view_standings);
+        mImageView.setImageResource(R.drawable.remove_tournament);
     }
 }

@@ -46,7 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="2. In the screen above you can either add or delete teams"
+            android:text="2. In the screen above you can either add teams or remove them by selecting the team to remove and tapping &quot;Remove&quot;"
             android:id="@+id/textView19" />
     </LinearLayout>
 </RelativeLayout>
