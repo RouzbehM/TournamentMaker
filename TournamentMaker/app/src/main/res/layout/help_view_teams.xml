@@ -17,12 +17,6 @@
         android:layout_centerHorizontal="true"
         android:weightSum="1">
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"></LinearLayout>
-
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="300dp"
@@ -35,18 +29,20 @@
             android:text="Steps:"
             android:id="@+id/textView17" />
 
-        <TextView
+        <ScrollView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="1. Tap the tournament you would like to view"
-            android:id="@+id/textView18" />
+            android:id="@+id/scrollView" >
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="2. In the screen above you can either add teams or remove them by selecting the team to remove and tapping &quot;Remove&quot;"
-            android:id="@+id/textView19" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/add_remove_team_instructions"
+                android:id="@+id/textView18" />
+
+        </ScrollView>
+
+
     </LinearLayout>
 </RelativeLayout>

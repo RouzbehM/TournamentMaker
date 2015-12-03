@@ -14,4 +14,25 @@
     <string name="title_activity_add_tournaments">Adding Tournaments</string>
     <string name="title_activity_remove_teams">Removing Teams</string>
     <string name="title_activity_remove_tournaments">Removing Tournaments</string>
+    <string name="create_tournament_instructions">
+        1. In the screen above, tap &quot;Create Tournament&quot;
+        \n
+        2. Input the tournament name and tournament type, tap &quot;Create Tournament&quot;
+        \n
+        3. Add teams that will be in the tournament
+        \n
+        4. Tap &quot;Start Tournament&quot;
+    </string>
+    <string name="add_remove_team_instructions">
+        1. Tap the tournament you would like to view
+        \n
+        2. In the screen above you can either add teams or remove them by selecting the team to remove and tapping &quot;Remove&quot;
+    </string>
+    <string name="add_match_instructions">
+        1. Once you have started a tournament, tap to view the tournament
+        \n
+        2. Tap &quot;Add Match&quot;
+        \n
+        3. In the screen above, you can set match results
+    </string>
 </resources>

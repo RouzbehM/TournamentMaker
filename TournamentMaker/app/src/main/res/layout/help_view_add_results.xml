@@ -22,12 +22,6 @@
             android:id="@+id/imageView3"
             android:layout_gravity="center_horizontal" />
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal" />
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -35,25 +29,18 @@
             android:text="Steps:"
             android:id="@+id/textView23" />
 
-        <TextView
+        <ScrollView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="1. Once you have started a tournament, tap to view the tournament"
-            android:id="@+id/textView24" />
+            android:id="@+id/scrollView" >
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="2. Tap &quot;Add Match&quot;"
-            android:id="@+id/textView25" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/add_match_instructions"
+                android:id="@+id/textView18" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="3. In the screen above, you can set match results"
-            android:id="@+id/textView26" />
+        </ScrollView>
     </LinearLayout>
 </RelativeLayout>

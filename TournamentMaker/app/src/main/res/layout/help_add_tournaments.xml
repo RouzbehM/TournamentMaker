@@ -22,12 +22,6 @@
             android:id="@+id/imageView5"
             android:layout_gravity="center_horizontal" />
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal" />
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -35,32 +29,18 @@
             android:text="Steps:"
             android:id="@+id/textView30" />
 
-        <TextView
+        <ScrollView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="1. In the screen above, tap &quot;Create Tournament&quot;"
-            android:id="@+id/textView31" />
+            android:id="@+id/scrollView" >
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="2. Input the tournament name and tournament type, tap &quot;Create Tournament&quot;"
-            android:id="@+id/textView32" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/create_tournament_instructions"
+                android:id="@+id/textView18" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="3. Add teams that will be in the tournament"
-            android:id="@+id/textView33" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="4. Tap &quot;Start Tournament&quot;"
-            android:id="@+id/textView34" />
+        </ScrollView>
     </LinearLayout>
 </RelativeLayout>
