@@ -14,7 +14,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true">
+        android:layout_centerHorizontal="true"
+        android:weightSum="1">
 
         <LinearLayout
             android:orientation="horizontal"
@@ -30,6 +31,11 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="What do you need help with?"
             android:id="@+id/textView12" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.19" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -59,6 +65,11 @@
             android:id="@+id/button7"
             android:onClick="viewHelpStandings"/>
 
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.19" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -72,6 +83,11 @@
             android:text="Adding/Removing Teams"
             android:id="@+id/button3"
             android:onClick="viewHelpTeams"/>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.19" />
 
         <TextView
             android:layout_width="wrap_content"
