@@ -29,12 +29,17 @@ public class ViewTournament extends ActionBarActivity {
         Intent intent = getIntent();
         tournamentID = intent.getIntExtra("tournamentID",-1);
         tournamentType = intent.getStringExtra("type");
-        if(tournamentType.equals(Tournament.COMBINATION)){
-            removeView(findViewById(R.id.nextRoundButton));
-        }else if(tournamentType.equals(Tournament.ROUND_ROBIN)){
-            removeView(findViewById(R.id.addMatchButton));
-            removeView(findViewById(R.id.nextRoundButton));
-        }else if(tournamentType.equals(Tournament.KNOCK_OUT)){
+        if(tournamentType==null){
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor c = db.rawQuery(
+                    "SELECT " + TournamentContract.TournamentEntry.COLUMN_NAME_TYPE +
+                    " FROM " + TournamentContract.TournamentEntry.TABLE_NAME +
+                    " WHERE " + TournamentContract.TournamentEntry._ID + " = " + tournamentID,null);
+            if(c.moveToFirst()){
+                tournamentType = c.getString(c.getColumnIndex(TournamentContract.TournamentEntry.COLUMN_NAME_TYPE));
+            }
+        }
+        if(tournamentType.equals(Tournament.ROUND_ROBIN)){
             removeView(findViewById(R.id.addMatchButton));
         }
         loadMatches();
@@ -100,10 +105,6 @@ public class ViewTournament extends ActionBarActivity {
         MatchCursorAdapter cursorAdapter = new MatchCursorAdapter(this,cursor,0);
         ListView matchList = (ListView) findViewById(R.id.matchList);
         matchList.setAdapter(cursorAdapter);
-    }
-
-    public void generateNextRound(View view){
-
     }
 
 }

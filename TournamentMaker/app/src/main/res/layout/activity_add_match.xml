@@ -25,42 +25,25 @@
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="178dp">
-
-        <ListView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/teamlisT"
-            android:layout_gravity="center_horizontal" />
-    </LinearLayout>
-
-    <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="42dp">
 
-        <TextView
+        <Spinner
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:id="@+id/team1"
-            android:gravity="center_vertical|clip_horizontal"
-            android:textColor="#000000"
-            android:layout_weight="0.46"
-            android:hint="Team1" />
+            android:layout_height="wrap_content"
+            android:id="@+id/team1spinner"
+            android:layout_weight="1"
+            android:spinnerMode="dialog"
+            android:textAlignment="center" />
 
-        <TextView
+        <Spinner
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:id="@+id/team2"
-            android:textColor="#000000"
-            android:layout_weight="0.47"
-            android:gravity="center_vertical|right"
-            android:hint="Team 2" />
-
+            android:layout_height="wrap_content"
+            android:id="@+id/team2spinner"
+            android:layout_weight="1"
+            android:spinnerMode="dialog"
+            android:textAlignment="center" />
     </LinearLayout>
 
     <RelativeLayout
@@ -86,7 +69,8 @@
             android:hint="score"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:inputType="number" />
 
         <EditText
             android:layout_width="wrap_content"
@@ -95,7 +79,8 @@
             android:hint="score"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            android:inputType="number" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -111,6 +96,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="75dp" />
+            android:layout_marginTop="75dp"
+            android:onClick="onClick" />
     </RelativeLayout>
 </LinearLayout>

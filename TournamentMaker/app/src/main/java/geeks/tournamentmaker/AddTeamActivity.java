@@ -158,6 +158,9 @@ public class AddTeamActivity extends AppCompatActivity {
         }else if(name.equals("BYE")){
             displayMessage("You cannot pick that name!");
             return false;
+        }else if(name.equals("")){
+            displayMessage("Please enter a name.");
+            return false;
         }
         return true;
     }

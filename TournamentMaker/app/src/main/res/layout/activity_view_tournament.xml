@@ -55,17 +55,6 @@
         android:layout_toRightOf="@+id/standingsButton"
         android:layout_toEndOf="@+id/standingsButton"
         android:onClick="createMatch" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Next Round"
-        android:id="@+id/nextRoundButton"
-        android:layout_alignTop="@+id/addMatchButton"
-        android:layout_toRightOf="@+id/addMatchButton"
-        android:layout_toEndOf="@+id/addMatchButton"
-        android:onClick="generateNextRound" />
     </LinearLayout>
 
     <ListView
