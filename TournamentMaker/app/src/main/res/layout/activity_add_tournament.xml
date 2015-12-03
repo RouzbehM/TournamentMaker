@@ -12,8 +12,7 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="53dp"
-        android:background="#ccffff">
+        android:layout_height="53dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -23,8 +22,8 @@
             android:id="@+id/ActivityName"
             android:layout_gravity="center_horizontal"
             android:gravity="center_vertical|center_horizontal"
-            android:textColor="#4d1300"
-            android:textSize="20dp" />
+            android:textSize="20dp"
+            android:textColor="#000000" />
     </LinearLayout>
 
     <LinearLayout
@@ -51,7 +50,7 @@
 
         <EditText
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:id="@+id/Message1Box"
             android:layout_gravity="center_horizontal"
             android:layout_weight="2.25"
@@ -61,8 +60,7 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="62dp"
-        android:layout_weight="0.05">
+        android:layout_height="58dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -78,7 +76,8 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="63dp">
+        android:layout_height="63dp"
+        android:background="#4d5966">
 
         <Spinner
             android:layout_width="match_parent"
