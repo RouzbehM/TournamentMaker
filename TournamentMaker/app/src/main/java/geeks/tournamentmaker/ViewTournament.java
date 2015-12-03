@@ -62,7 +62,7 @@ public class ViewTournament extends ActionBarActivity {
     }
 
     public void viewStandings(View view){
-        Intent intent = new Intent(this,AddMatchActivity.class);
+        Intent intent = new Intent(this,ViewStandingsActivity.class);
         intent.putExtra("tournamentID", tournamentID);
         startActivity(intent);
     }

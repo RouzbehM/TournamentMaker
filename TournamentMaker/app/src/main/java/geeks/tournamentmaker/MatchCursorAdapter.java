@@ -35,17 +35,20 @@ public class MatchCursorAdapter extends CursorAdapter {
         String team2=cursor.getString(cursor.getColumnIndex(TournamentContract.MatchEntry.COLUMN_NAME_TEAM2));
         String score1=cursor.getString(cursor.getColumnIndex(TournamentContract.MatchEntry.COLUMN_NAME_SCORE1));
         String score2=cursor.getString(cursor.getColumnIndex(TournamentContract.MatchEntry.COLUMN_NAME_SCORE2));
+        final int tournamentID = cursor.getInt(cursor.getColumnIndex(TournamentContract.MatchEntry.COLUMN_NAME_TOURNAMENT_ID));
         final int matchId = cursor.getInt(cursor.getColumnIndex(TournamentContract.MatchEntry._ID));
 
         // Populate fields with extracted properties
         matchItem.setText(team1 + " vs. " + team2 );
         if(score1!=null&&score2!=null){
             matchItem.setText( matchItem.getText() + " | Results: " + score1 + "-" + score2);
+            matchItem.setClickable(false);
         }else if(!team1.equals("BYE")&&!team2.equals("BYE")){
             matchItem.setOnClickListener(new View.OnClickListener(){
                 public void onClick(View view){
                     Intent intent = new Intent(view.getContext(),EnterMatchResults.class);
                     intent.putExtra("matchID",matchId);
+                    intent.putExtra("tournamentID",tournamentID);
                     view.getContext().startActivity(intent);
                 }
             });

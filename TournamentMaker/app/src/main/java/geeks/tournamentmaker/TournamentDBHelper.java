@@ -31,7 +31,7 @@ public class TournamentDBHelper extends SQLiteOpenHelper {
     private static final String SQL_CREATE_MATCH_TABLE =
         "CREATE TABLE " + TournamentContract.MatchEntry.TABLE_NAME + " (" +
             TournamentContract.MatchEntry._ID + " INTEGER PRIMARY KEY," +
-            TournamentContract.MatchEntry.COLUMN_NAME_TOURNAMENT_ID + TEXT_TYPE + COMMA_SEP +
+            TournamentContract.MatchEntry.COLUMN_NAME_TOURNAMENT_ID + " INTEGER" + COMMA_SEP +
             TournamentContract.MatchEntry.COLUMN_NAME_SCORE1 + TEXT_TYPE + COMMA_SEP +
             TournamentContract.MatchEntry.COLUMN_NAME_SCORE2 + TEXT_TYPE + COMMA_SEP +
             TournamentContract.MatchEntry.COLUMN_NAME_TEAM1 + TEXT_TYPE + COMMA_SEP +

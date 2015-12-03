@@ -11,47 +11,28 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 public class EnterMatchResults extends ActionBarActivity {
 
     Button submitResults;
     private TournamentDBHelper dbHelper;
     private int matchID;
+    private int tournamentID;
+    private EditText score1;
+    private EditText score2;
     String teamName1;
     String teamName2;
 
     public void onClick(View v){
-        if(v == submitResults) {
-        EditText score1 = (EditText)findViewById(R.id.homeTeamScore);
-        EditText score2 = (EditText)findViewById(R.id.awayTeamScore);
-
         int scoreTeam1 = Integer.parseInt(score1.getText().toString());
         int scoreTeam2 = Integer.parseInt(score2.getText().toString());
 
             SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-
-
             ContentValues values = new ContentValues();
-            String[] projection = {TournamentContract.MatchEntry.COLUMN_NAME_TEAM1,
-                    TournamentContract.MatchEntry.COLUMN_NAME_TEAM2
-            };
-            String selection = TournamentContract.MatchEntry._ID + " LIKE ?";
+            String selection = TournamentContract.MatchEntry._ID + " = ?";
             String[] selectionArgs = {"" + matchID};
-            Cursor c = db.query(
-                TournamentContract.MatchEntry.TABLE_NAME,
-                projection,
-                selection,
-                selectionArgs,
-                null,
-                null,
-                null
-            );
-
-            teamName1 = c.getString(0);
-            teamName2 = c.getString(1);
-
-
 
             values.put(TournamentContract.MatchEntry.COLUMN_NAME_SCORE1, scoreTeam1);
             values.put(TournamentContract.MatchEntry.COLUMN_NAME_SCORE2, scoreTeam2);
@@ -61,20 +42,15 @@ public class EnterMatchResults extends ActionBarActivity {
                 values.put(TournamentContract.MatchEntry.COLUMN_NAME_WINNER, teamName2);
             }
 
-
-
-
             db.update(
                     TournamentContract.MatchEntry.TABLE_NAME,
                     values,
                     selection,
                     selectionArgs);
             db.close();
-
-
-        }
-
-
+            Intent myIntent = new Intent(this, ViewTournament.class);
+            myIntent.putExtra("tournamentID", tournamentID);
+            startActivity(myIntent);
     }
 
 
@@ -82,12 +58,35 @@ public class EnterMatchResults extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enter_match_results);
+        dbHelper = new TournamentDBHelper(this);
         submitResults = (Button)findViewById(R.id.submitScores);
         Intent intent = getIntent();
         matchID = intent.getIntExtra("matchID",-1);
+        tournamentID = intent.getIntExtra("tournamentID",-1);
 
-        dbHelper = new TournamentDBHelper(this);
-
+        String[] projection = {TournamentContract.MatchEntry.COLUMN_NAME_TEAM1,
+                TournamentContract.MatchEntry.COLUMN_NAME_TEAM2
+        };
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String selection = TournamentContract.MatchEntry._ID + " = ?";
+        String[] selectionArgs = {"" + matchID};
+        Cursor c = db.query(
+                TournamentContract.MatchEntry.TABLE_NAME,
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                null
+        );
+        c.moveToFirst();
+        teamName1 = c.getString(c.getColumnIndex(TournamentContract.MatchEntry.COLUMN_NAME_TEAM1));
+        teamName2 = c.getString(c.getColumnIndex(TournamentContract.MatchEntry.COLUMN_NAME_TEAM2));
+        c.close();
+        score1 = (EditText)findViewById(R.id.homeTeamScore);
+        score2 = (EditText)findViewById(R.id.awayTeamScore);
+        score1.setHint(teamName1);
+        score2.setHint(teamName2);
     }
 
 

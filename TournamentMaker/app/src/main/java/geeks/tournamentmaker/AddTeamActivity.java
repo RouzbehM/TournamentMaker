@@ -161,6 +161,9 @@ public class AddTeamActivity extends AppCompatActivity {
         }else if(name.equals("")){
             displayMessage("Please enter a name.");
             return false;
+        }else if(name.length()>15){
+            displayMessage("That name is too long!");
+            return false;
         }
         return true;
     }

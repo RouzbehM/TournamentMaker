@@ -46,7 +46,7 @@ public class ViewStandingsActivity extends ActionBarActivity {
         standings.setAdapter(arrayAdapter);
 
     }
-    public static Integer[] countItems(String[] arr)
+    private Integer[] countItems(String[] arr)
     {
         List<Integer> itemCount = new ArrayList<Integer>();
         Integer counter = 0;
