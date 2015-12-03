@@ -100,7 +100,6 @@ public class AddTeamActivity extends AppCompatActivity {
 
     public void addTeam(View view){
         getTeamFromUser();
-        saveTeams();
     }
 
     private void saveTeams(){
@@ -109,6 +108,7 @@ public class AddTeamActivity extends AppCompatActivity {
         JSONObject jsonTeams = new JSONObject();
         try {
             jsonTeams.put("teams", new JSONArray(teams));
+            Log.d("TEST",jsonTeams.toString());
         }catch(JSONException e){
             e.printStackTrace();
         }
@@ -142,6 +142,7 @@ public class AddTeamActivity extends AppCompatActivity {
                 String teamName = input.getText().toString();
                 if(nameIsValid(teamName)){
                     addTeam(teamName);
+                    saveTeams();
                     dialog.dismiss();
                 }
 
