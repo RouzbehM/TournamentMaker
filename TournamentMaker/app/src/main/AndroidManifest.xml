@@ -75,7 +75,6 @@
         <activity android:name=".help.ViewStandings" />
         <activity android:name=".help.ViewTeams" />
         <activity android:name=".help.ViewAddResults" />
-        <activity android:name=".help.ViewResults"></activity>
     </application>
 
 </manifest>

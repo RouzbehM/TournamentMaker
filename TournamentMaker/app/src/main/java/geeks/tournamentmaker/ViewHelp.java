@@ -3,6 +3,8 @@ package geeks.tournamentmaker;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.view.View;
+
 import geeks.tournamentmaker.help.*;
 
 public class ViewHelp extends ActionBarActivity {
@@ -13,33 +15,28 @@ public class ViewHelp extends ActionBarActivity {
         setContentView(R.layout.activity_view_help);
     }
 
-    public void viewHelpAddTournaments(){
+    public void viewHelpAddTournaments(View view){
         Intent intent = new Intent(this, AddTournaments.class);
         startActivity(intent);
     }
 
-    public void viewHelpRemoveTournaments(){
+    public void viewHelpRemoveTournaments(View view){
         Intent intent = new Intent(this, RemoveTournament.class);
         startActivity(intent);
     }
 
-    public void viewHelpStandings(){
+    public void viewHelpStandings(View view){
         Intent intent = new Intent(this, ViewStandings.class);
         startActivity(intent);
     }
 
-    public void viewHelpTeams(){
+    public void viewHelpTeams(View view){
         Intent intent = new Intent(this, ViewTeams.class);
         startActivity(intent);
     }
 
-    public void viewHelpAddResults(){
+    public void viewHelpAddResults(View view){
         Intent intent = new Intent(this, ViewAddResults.class);
-        startActivity(intent);
-    }
-
-    public void viewHelpViewResults(){
-        Intent intent = new Intent(this, ViewResults.class);
         startActivity(intent);
     }
 
