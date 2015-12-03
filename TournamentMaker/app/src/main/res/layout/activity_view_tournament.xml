@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Matches"
+        android:textColor="#000000"
         android:id="@+id/textView11"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
