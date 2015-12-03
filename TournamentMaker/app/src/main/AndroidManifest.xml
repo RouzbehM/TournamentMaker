@@ -35,9 +35,6 @@
         <activity
             android:name=".About"
             android:label="@string/title_activity_about">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="geeks.tournamentmaker.MainActivity" />
         </activity>
         <activity
             android:name=".EnterMatchResults"
