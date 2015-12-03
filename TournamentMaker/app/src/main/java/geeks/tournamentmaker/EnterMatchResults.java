@@ -58,9 +58,6 @@ public class EnterMatchResults extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enter_match_results);
         submitResults = (Button)findViewById(R.id.submitScores);
-        submitResults.setOnClickListener((View.OnClickListener)EnterMatchResults.this);
-
-
         Intent intent = getIntent();
         matchID = intent.getIntExtra("matchID",-1);
 
