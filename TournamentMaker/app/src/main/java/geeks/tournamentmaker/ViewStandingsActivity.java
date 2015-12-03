@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 
+import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -44,6 +45,23 @@ public class ViewStandingsActivity extends ActionBarActivity {
         standings.setAdapter(arrayAdapter);
 
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                break;
+        }
+        return true;
+    }
+    @Override
+    public void onBackPressed(){
+        Intent intent = new Intent(this, ViewTournament.class);
+        intent.putExtra("tournamentID",tournamentID);
+        startActivity(intent);
+    }
+
     private Integer[] countItems(String[] arr)
     {
         List<Integer> itemCount = new ArrayList<Integer>();

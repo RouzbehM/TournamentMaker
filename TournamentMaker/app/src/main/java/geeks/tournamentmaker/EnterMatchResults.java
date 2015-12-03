@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -118,8 +119,17 @@ public class EnterMatchResults extends ActionBarActivity {
         else if(id == R.id.action_about){
             Intent intent = new Intent(this, About.class);
             startActivity(intent);
+        }else if(id == android.R.id.home){
+            onBackPressed();
         }
 
-        return super.onOptionsItemSelected(item);
+        return true;
+    }
+
+    @Override
+    public void onBackPressed(){
+        Intent intent = new Intent(this, ViewTournament.class);
+        intent.putExtra("tournamentID",tournamentID);
+        startActivity(intent);
     }
 }

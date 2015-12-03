@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -82,6 +83,22 @@ public class AddMatchActivity extends ActionBarActivity {
 
         spinner1.setAdapter(spinnerArrayAdapter);
         spinner2.setAdapter(spinnerArrayAdapter);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                break;
+        }
+        return true;
+    }
+    @Override
+    public void onBackPressed(){
+        Intent intent = new Intent(this, ViewTournament.class);
+        intent.putExtra("tournamentID",tournamentID);
+        startActivity(intent);
     }
 
     public void onClick(View v)

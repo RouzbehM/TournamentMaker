@@ -16,16 +16,24 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
 
+      <Button
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="Delete Tournament"
+          android:id="@+id/deleteButton"
+          android:layout_centerHorizontal="true"
+          android:layout_alignParentBottom="true"
+          android:onClick="deleteTournament" />
+
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Add Team"
             android:id="@+id/addTeamButton"
-            android:layout_alignParentBottom="true"
+            android:onClick="addTeam"
+            android:layout_above="@+id/startTournamentButton"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginBottom="48dp"
-            android:onClick="addTeam" />
+            android:layout_alignParentStart="true" />
 
         <Button
             android:layout_width="wrap_content"
@@ -33,10 +41,10 @@
             android:text="Remove"
             android:enabled="false"
             android:id="@+id/removeButton"
-            android:layout_alignTop="@+id/addTeamButton"
+            android:onClick="removeTeam"
+            android:layout_above="@+id/startTournamentButton"
             android:layout_toRightOf="@+id/addTeamButton"
-            android:layout_toEndOf="@+id/addTeamButton"
-            android:onClick="removeTeam" />
+            android:layout_toEndOf="@+id/addTeamButton" />
 
         <Button
             android:layout_width="fill_parent"
@@ -44,20 +52,23 @@
             android:text="Start Tournament"
             android:enabled="false"
             android:id="@+id/startTournamentButton"
-            android:layout_alignParentBottom="true"
+            android:onClick="startTournament"
+            android:layout_above="@+id/deleteButton"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:onClick="startTournament" />
+            android:layout_alignParentEnd="true" />
 
-        <ListView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/teamList"
-            android:layout_below="@+id/textView"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_above="@+id/addTeamButton"
-            android:choiceMode="singleChoice"
-            android:listSelector="#666666"/>
-    </RelativeLayout>
+      <ListView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:id="@+id/teamList"
+          android:layout_below="@+id/textView"
+          android:layout_alignParentLeft="true"
+          android:layout_alignParentStart="true"
+          android:layout_above="@+id/addTeamButton"
+          android:choiceMode="singleChoice"
+          android:listSelector="#666666"/>
+
+
+
+  </RelativeLayout>
 

@@ -45,6 +45,12 @@ public class ViewTournament extends ActionBarActivity {
         loadMatches();
     }
 
+    @Override
+    public void onBackPressed(){
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
     protected void onStop(){
         super.onStop();
         if(!(cursor==null)&&!cursor.isClosed())
