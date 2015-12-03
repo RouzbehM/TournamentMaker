@@ -134,11 +134,9 @@ public class AddTeamActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String teamName = input.getText().toString();
-                if(!teams.contains(teamName)) {
+                if(nameIsValid(teamName)){
                     addTeam(teamName);
                     dialog.dismiss();
-                }else{
-                    displayMessage("That team name is already added.");
                 }
 
             }
@@ -151,6 +149,17 @@ public class AddTeamActivity extends AppCompatActivity {
         });
 
         builder.show();
+    }
+
+    private boolean nameIsValid(String name){
+        if(teams.contains(name)){
+            displayMessage("That team name is already added.");
+            return false;
+        }else if(name.equals("BYE")){
+            displayMessage("You cannot pick that name!");
+            return false;
+        }
+        return true;
     }
 
     public void removeTeam(View view) {
@@ -180,6 +189,7 @@ public class AddTeamActivity extends AppCompatActivity {
 
             Intent intent = new Intent(this, ViewTournament.class);
             intent.putExtra("tournamentID", tournamentID);
+            intent.putExtra("type",tournamentType);
             startActivity(intent);
         }else{
             displayMessage("You must have at least 2 teams to start a tournament");
@@ -197,13 +207,14 @@ public class AddTeamActivity extends AppCompatActivity {
                 }
             }
         }else if(tournamentType.equals(Tournament.KNOCK_OUT)){
-            //add byes until power of 2 is reached
-            int targetSize = getNextTwoPower(teams.size());
-            while(teams.size()<targetSize){
-                teams.add("BYE");
-            }
+
             //randomize team order
             Collections.shuffle(teams);
+            //add byes until power of 2 is reached
+            int targetSize = getNextTwoPower(teams.size());
+            for(int i = 0; teams.size()<targetSize; i+=2){
+                teams.add(i,"BYE");
+            }
             //generate first round of matches
             for(int i = 0; i<teams.size();i+=2){
                 matches.add(new Match(teams.get(i),teams.get(i+1)));
@@ -221,6 +232,11 @@ public class AddTeamActivity extends AppCompatActivity {
             values.put(TournamentContract.MatchEntry.COLUMN_NAME_TOURNAMENT_ID, tournamentID);
             values.put(TournamentContract.MatchEntry.COLUMN_NAME_TEAM1, match.getTeam1());
             values.put(TournamentContract.MatchEntry.COLUMN_NAME_TEAM2, match.getTeam2());
+            if(match.getTeam1().equals("BYE")){
+                values.put(TournamentContract.MatchEntry.COLUMN_NAME_WINNER,match.getTeam2());
+            }else if(match.getTeam2().equals("BYE")){
+                values.put(TournamentContract.MatchEntry.COLUMN_NAME_WINNER,match.getTeam1());
+            }
 
             db.insert(
                     TournamentContract.MatchEntry.TABLE_NAME,
@@ -231,7 +247,7 @@ public class AddTeamActivity extends AppCompatActivity {
     }
 
     private int getNextTwoPower(int num){
-        double y = Math.floor(Math.log(num) / Math.log(2));
+        double y = Math.floor(Math.log(num-0.00001) / Math.log(2));
         return (int)Math.pow(2, y + 1);
     }
 

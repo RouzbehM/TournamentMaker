@@ -9,12 +9,14 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 public class ViewTournament extends ActionBarActivity {
 
     private int tournamentID;
     private String tournamentType;
     private TournamentDBHelper dbHelper;
+    private Cursor cursor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +37,13 @@ public class ViewTournament extends ActionBarActivity {
         }else if(tournamentType.equals(Tournament.KNOCK_OUT)){
             removeView(findViewById(R.id.addMatchButton));
         }
+        loadMatches();
+    }
+
+    protected void onStop(){
+        super.onStop();
+        if(!(cursor==null)&&!cursor.isClosed())
+            cursor.close();
     }
 
     private void removeView(View view){
@@ -84,11 +93,13 @@ public class ViewTournament extends ActionBarActivity {
 
     private void loadMatches(){
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Cursor c = db.rawQuery(
-                "SELECT * FROM "+ TournamentContract.MatchEntry.TABLE_NAME +
-                " WHERE " + TournamentContract.MatchEntry.COLUMN_NAME_TOURNAMENT_ID +
-                " = " + tournamentID,null);
-
+        cursor = db.rawQuery(
+                "SELECT * FROM " + TournamentContract.MatchEntry.TABLE_NAME +
+                        " WHERE " + TournamentContract.MatchEntry.COLUMN_NAME_TOURNAMENT_ID +
+                        " = " + tournamentID, null);
+        MatchCursorAdapter cursorAdapter = new MatchCursorAdapter(this,cursor,0);
+        ListView matchList = (ListView) findViewById(R.id.matchList);
+        matchList.setAdapter(cursorAdapter);
     }
 
     public void generateNextRound(View view){

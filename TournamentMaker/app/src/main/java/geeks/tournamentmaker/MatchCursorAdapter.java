@@ -41,7 +41,7 @@ public class MatchCursorAdapter extends CursorAdapter {
         matchItem.setText(team1 + " vs. " + team2 );
         if(score1!=null&&score2!=null){
             matchItem.setText( matchItem.getText() + " | Results: " + score1 + "-" + score2);
-        }else{
+        }else if(!team1.equals("BYE")&&!team2.equals("BYE")){
             matchItem.setOnClickListener(new View.OnClickListener(){
                 public void onClick(View view){
                     Intent intent = new Intent(view.getContext(),EnterMatchResults.class);
