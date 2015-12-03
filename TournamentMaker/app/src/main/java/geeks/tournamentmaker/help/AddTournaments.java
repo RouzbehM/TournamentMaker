@@ -17,7 +17,7 @@ public class AddTournaments extends ActionBarActivity {
         );
 
 
-        mImageView = (ImageView) findViewById(R.id.imageView);
-        mImageView.setImageResource(R.drawable.addtournament);
+        mImageView = (ImageView) findViewById(R.id.imageView5);
+        mImageView.setImageResource(R.drawable.add_tournament);
     }
 }
