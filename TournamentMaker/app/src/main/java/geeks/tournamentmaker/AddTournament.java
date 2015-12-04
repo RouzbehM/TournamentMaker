@@ -92,11 +92,11 @@ public class AddTournament extends ActionBarActivity {
             String name = tournamentname.getText().toString();
             String type = typespinner.getSelectedItem().toString();
 
+            // Checking for valid tournament name
             if (name.equals("") == false && type.equals("") == false)
             {
                Tournament aTournament = new Tournament(name,type);
 
-                // Gets the data repository in write mode
                 SQLiteDatabase db = mDbHelper.getReadableDatabase();
                 String[] projection = {TournamentContract.TournamentEntry._ID};
                 String[] selectionArgs = {""+name};
@@ -109,31 +109,25 @@ public class AddTournament extends ActionBarActivity {
                         null,                                     // don't filter by row groups
                         null
                 );
-
                 if(c.moveToFirst()) {
-                    Context context = this;
-                    CharSequence text = "A tournament with that name already exists!";
-                    int duration = Toast.LENGTH_LONG;
-
-                    Toast toast = Toast.makeText(context, text, duration);
-                    toast.show();
+                    DialogHelper.makeLongToast(this,"A tournament with that name already exists!");
                     c.close();
                 }else {
                     c.close();
                     db = mDbHelper.getWritableDatabase();
-// Create a new map of values, where column names are the keys
+                    // Create a new map of values to add in a new tournament entry
                     ContentValues values = new ContentValues();
                     values.put(TournamentContract.TournamentEntry.COLUMN_NAME_NAME, aTournament.getName());
                     values.put(TournamentContract.TournamentEntry.COLUMN_NAME_STATUS, aTournament.getStatus());
                     values.put(TournamentContract.TournamentEntry.COLUMN_NAME_TYPE, aTournament.getTournamenttype());
 
-// Insert the new row, returning the primary key value of the new row
+                    //Insert the new row, returning the primary key value of the new row
                     long newRowId;
                     newRowId = db.insert(
                             TournamentContract.TournamentEntry.TABLE_NAME, null, values);
                     db.close();
 
-
+                    //Start activity for adding teams
                     Intent myIntent = new Intent(AddTournament.this, AddTeamActivity.class);
                     myIntent.putExtra("tournamentID", (int) newRowId);
                     myIntent.putExtra("type", aTournament.getTournamenttype());
@@ -142,35 +136,29 @@ public class AddTournament extends ActionBarActivity {
             }
             else
             {
-                Context context = getApplicationContext();
-                CharSequence text = "Missing Fields";
-                int duration = Toast.LENGTH_LONG;
-
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
+                DialogHelper.makeLongToast(this,"Missing Fields");
             }
-
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+        //add menu items.
         getMenuInflater().inflate(R.menu.menu_add_tournament, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if(id == R.id.action_help){
+            Intent intent = new Intent(this, ViewHelp.class);
+            startActivity(intent);
         }
-
+        else if(id == R.id.action_about){
+            Intent intent = new Intent(this, About.class);
+            startActivity(intent);
+        }
         return super.onOptionsItemSelected(item);
     }
 }

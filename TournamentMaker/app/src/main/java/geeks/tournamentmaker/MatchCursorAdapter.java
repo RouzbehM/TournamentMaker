@@ -17,8 +17,6 @@ public class MatchCursorAdapter extends CursorAdapter {
         super(context, cursor, 0);
     }
 
-    // The newView method is used to inflate a new view and return it,
-    // you don't bind any data to the view at this point.
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
         return LayoutInflater.from(context).inflate(R.layout.simple_list_item, parent, false);
@@ -28,9 +26,9 @@ public class MatchCursorAdapter extends CursorAdapter {
     // such as setting the text on a TextView.
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        // Find fields to populate in inflated template
+        // Find list item to populate in inflated template
         TextView matchItem = (TextView) view.findViewById(R.id.list_item_text);
-        // Extract properties from cursor
+        // Extract match data from cursor
         String team1= cursor.getString(cursor.getColumnIndex(TournamentContract.MatchEntry.COLUMN_NAME_TEAM1));
         String team2=cursor.getString(cursor.getColumnIndex(TournamentContract.MatchEntry.COLUMN_NAME_TEAM2));
         String score1=cursor.getString(cursor.getColumnIndex(TournamentContract.MatchEntry.COLUMN_NAME_SCORE1));
@@ -38,14 +36,17 @@ public class MatchCursorAdapter extends CursorAdapter {
         final int tournamentID = cursor.getInt(cursor.getColumnIndex(TournamentContract.MatchEntry.COLUMN_NAME_TOURNAMENT_ID));
         final int matchId = cursor.getInt(cursor.getColumnIndex(TournamentContract.MatchEntry._ID));
 
-        // Populate fields with extracted properties
+        // Populate match list item
         matchItem.setText(team1 + " vs. " + team2 );
         if(score1!=null&&score2!=null){
+            //append the match score and disable match result entry
             matchItem.setText( matchItem.getText() + " | Results: " + score1 + "-" + score2);
             matchItem.setClickable(false);
         }else if(!team1.equals("BYE")&&!team2.equals("BYE")){
+            //add click listener for matches that have no results yet
             matchItem.setOnClickListener(new View.OnClickListener(){
                 public void onClick(View view){
+                    //start activity for entering match results
                     Intent intent = new Intent(view.getContext(),EnterMatchResults.class);
                     intent.putExtra("matchID",matchId);
                     intent.putExtra("tournamentID",tournamentID);

@@ -28,10 +28,13 @@ public class ViewTournament extends ActionBarActivity {
 
         dbHelper = new TournamentDBHelper(this);
 
+        //get the tournament type and tournament ID
         Intent intent = getIntent();
         tournamentID = intent.getIntExtra("tournamentID",-1);
         tournamentType = intent.getStringExtra("type");
+
         if(tournamentType==null){
+            //get tournament type by querying the database for tournament with provided ID
             SQLiteDatabase db = dbHelper.getReadableDatabase();
             Cursor c = db.rawQuery(
                     "SELECT " + TournamentContract.TournamentEntry.COLUMN_NAME_TYPE +
@@ -41,6 +44,7 @@ public class ViewTournament extends ActionBarActivity {
                 tournamentType = c.getString(c.getColumnIndex(TournamentContract.TournamentEntry.COLUMN_NAME_TYPE));
             }
         }
+        //disable ability to add matches for a round robin tournament
         if(tournamentType.equals(Tournament.ROUND_ROBIN)){
             removeView(findViewById(R.id.addMatchButton));
         }
@@ -55,12 +59,8 @@ public class ViewTournament extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if(id == R.id.action_help){
             Intent intent = new Intent(this, ViewHelp.class);
             startActivity(intent);
@@ -68,7 +68,7 @@ public class ViewTournament extends ActionBarActivity {
         else if(id == R.id.action_about){
             Intent intent = new Intent(this, About.class);
             startActivity(intent);
-        }else if(id == android.R.id.home){
+        }else if(id == android.R.id.home){//back button in action bar
             onBackPressed();
         }
 
@@ -77,6 +77,7 @@ public class ViewTournament extends ActionBarActivity {
 
     @Override
     public void onBackPressed(){
+        //return to the main page
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
@@ -104,10 +105,12 @@ public class ViewTournament extends ActionBarActivity {
     }
 
     public void deleteTournament(View view){
+        // Create dialog to confirm deletion
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Deleting tournament");
         builder.setMessage("Are you sure you want to delete this tournament?");
-// Add the buttons
+
+        // Add the buttons
         builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 deleteTournament();
@@ -120,27 +123,35 @@ public class ViewTournament extends ActionBarActivity {
         });
         builder.show();
     }
+
     private void deleteTournament(){
         SQLiteDatabase db = dbHelper.getReadableDatabase();
+
         String selection = TournamentContract.TournamentEntry._ID + " = ?";
         String[] selectionArgs = { tournamentID+"" };
+
         String selection2 = TournamentContract.MatchEntry.COLUMN_NAME_TOURNAMENT_ID + " = ?";
         String[] selectionArgs2 = { tournamentID+"" };
 
+        //delete tournament from the tournaments database
         db.delete(TournamentContract.TournamentEntry.TABLE_NAME, selection, selectionArgs);
+        //delete all the matches associated with the tournament
         db.delete(TournamentContract.MatchEntry.TABLE_NAME,selection2,selectionArgs2);
 
         db.close();
+        //return to the main page
         Intent intent = new Intent(this,MainActivity.class);
         startActivity(intent);
     }
 
     private void loadMatches(){
         SQLiteDatabase db = dbHelper.getReadableDatabase();
+        //Query database for all matches with the provided tournament ID
         cursor = db.rawQuery(
                 "SELECT * FROM " + TournamentContract.MatchEntry.TABLE_NAME +
                         " WHERE " + TournamentContract.MatchEntry.COLUMN_NAME_TOURNAMENT_ID +
                         " = " + tournamentID, null);
+        //create and add cursor adapter to populate list of matches
         MatchCursorAdapter cursorAdapter = new MatchCursorAdapter(this,cursor,0);
         ListView matchList = (ListView) findViewById(R.id.matchList);
         matchList.setAdapter(cursorAdapter);

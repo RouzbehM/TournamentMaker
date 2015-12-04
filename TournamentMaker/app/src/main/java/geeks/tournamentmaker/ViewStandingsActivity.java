@@ -27,17 +27,19 @@ public class ViewStandingsActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_standings);
-        dbHelper  = new TournamentDBHelper(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //get the list used for displaying the team standings
+        standings = (ListView) findViewById(R.id.standingsview);
+
+        //get the tournament ID
         Intent intent = getIntent();
         tournamentID = intent.getIntExtra("tournamentID", 0);
 
-        standings = (ListView) findViewById(R.id.standingsview);
+        //initialize the database helper and generate the standings
+        dbHelper  = new TournamentDBHelper(this);
         loadStandings();
 
-        // This is the array adapter, it takes the context of the activity as a
-        // first parameter, the type of list view as a second parameter and your
-        // array as a third parameter.
+        // set adapter for populating the list of teams
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                 this,
                 android.R.layout.simple_list_item_1,
@@ -49,19 +51,15 @@ public class ViewStandingsActivity extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+        //add menu items to the action bar
         getMenuInflater().inflate(R.menu.menu_view_standings, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if(id == R.id.action_help){
             Intent intent = new Intent(this, ViewHelp.class);
             startActivity(intent);
@@ -69,7 +67,7 @@ public class ViewStandingsActivity extends ActionBarActivity {
         else if(id == R.id.action_about){
             Intent intent = new Intent(this, About.class);
             startActivity(intent);
-        }else if(id == android.R.id.home){
+        }else if(id == android.R.id.home){//action bar back button
             onBackPressed();
         }
 
@@ -77,6 +75,7 @@ public class ViewStandingsActivity extends ActionBarActivity {
     }
     @Override
     public void onBackPressed(){
+        //return to viewing the matches for the current tournament
         Intent intent = new Intent(this, ViewTournament.class);
         intent.putExtra("tournamentID",tournamentID);
         startActivity(intent);
@@ -116,6 +115,7 @@ public class ViewStandingsActivity extends ActionBarActivity {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String[] projection = {TournamentContract.MatchEntry.COLUMN_NAME_WINNER};
         String[] selectionArgs = {""+tournamentID};
+        //find all the match winners for the current tournament
         Cursor c = db.query(
                 TournamentContract.MatchEntry.TABLE_NAME,  // The table to query
                 projection,                               // The columns to return
@@ -125,7 +125,7 @@ public class ViewStandingsActivity extends ActionBarActivity {
                 null,                                     // don't filter by row groups
                 null
         );
-
+        //add winners to list of winners
         if (c.moveToFirst()) {
             addToWinners(c.getString(c.getColumnIndex(TournamentContract.MatchEntry.COLUMN_NAME_WINNER)));
             while(c.moveToNext()){
@@ -138,9 +138,9 @@ public class ViewStandingsActivity extends ActionBarActivity {
         if(sortedwinners.length!=0) {
             winners.toArray(sortedwinners);
             Arrays.sort(sortedwinners);
-
+            //tally up the number of wins
             Integer[] cArr = countItems(sortedwinners);
-
+            //populate the list that will be used for displaying the standings
             int num = -1;
             for (int i = 0; i < cArr.length; i++) {
                 num += cArr[i];

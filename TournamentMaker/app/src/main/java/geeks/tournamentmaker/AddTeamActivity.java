@@ -8,17 +8,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,44 +39,43 @@ public class AddTeamActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_team);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        //get listview that will be populated
         teamList = (ListView)findViewById(R.id.teamList);
 
         teams = new ArrayList<>();
         adapter = new ArrayAdapter<>(this,R.layout.simple_list_item,teams);
         teamList.setAdapter(adapter);
-
+        //keep track of which item is selected
         teamList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long arg3) {
                 selectedPosition=position;
+                //allow removal of selected item
                 setRemoveButtonEnabled(true);
             }
         });
+        //get tournament info
         Intent intent = getIntent();
         tournamentID = intent.getIntExtra("tournamentID",-1);
         tournamentType = intent.getStringExtra("type");
 
+        //initialize database helper and populate the team list
         dbHelper = new TournamentDBHelper(this);
-
         loadTeamList();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+        //add menu items
         getMenuInflater().inflate(R.menu.menu_add_player, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if(id == R.id.action_help){
             Intent intent = new Intent(this, ViewHelp.class);
             startActivity(intent);
@@ -105,17 +100,18 @@ public class AddTeamActivity extends AppCompatActivity {
     private void saveTeams(){
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         ContentValues values = new ContentValues();
+        //to store the array with the team names, we convert it into a JSON object
         JSONObject jsonTeams = new JSONObject();
         try {
             jsonTeams.put("teams", new JSONArray(teams));
-            Log.d("TEST",jsonTeams.toString());
         }catch(JSONException e){
             e.printStackTrace();
         }
+        //convert the JSON object to a string so that it can be stored in the SQLite database
         String teamsArray = jsonTeams.toString();
         values.put(TournamentContract.TournamentEntry.COLUMN_NAME_TEAMS, teamsArray);
 
-// Which row to update, based on the ID
+        // Which row to update, based on the ID
         String selection = TournamentContract.TournamentEntry._ID + " = ?";
         String[] selectionArgs = {tournamentID + ""};
 
@@ -131,11 +127,11 @@ public class AddTeamActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Enter a new team");
 
-// Set up the input
+        // Set up the input
         final EditText input = new EditText(this);
         builder.setView(input);
 
-// Set up the buttons
+        // Set up the buttons
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -160,16 +156,16 @@ public class AddTeamActivity extends AppCompatActivity {
 
     private boolean nameIsValid(String name){
         if(teams.contains(name)){
-            displayMessage("That team name is already added.");
+            DialogHelper.makeLongToast(this, "That team name is already added.");
             return false;
         }else if(name.equals("BYE")){
-            displayMessage("You cannot pick that name!");
+            DialogHelper.makeLongToast(this, "You cannot pick that name!");
             return false;
         }else if(name.equals("")){
-            displayMessage("Please enter a name.");
+            DialogHelper.makeLongToast(this,"Please enter a name.");
             return false;
         }else if(name.length()>15){
-            displayMessage("That name is too long!");
+            DialogHelper.makeLongToast(this,"That name is too long!");
             return false;
         }
         return true;
@@ -183,11 +179,11 @@ public class AddTeamActivity extends AppCompatActivity {
 
     public void startTournament(View view){
         if(teams.size()>1) {
+            //Update the current tournament status
             SQLiteDatabase db = dbHelper.getReadableDatabase();
             ContentValues values = new ContentValues();
             values.put(TournamentContract.TournamentEntry.COLUMN_NAME_STATUS, Tournament.STARTED);
 
-// Which row to update, based on the ID
             String selection = TournamentContract.TournamentEntry._ID + "=?";
             String[] selectionArgs = {tournamentID + ""};
 
@@ -198,14 +194,16 @@ public class AddTeamActivity extends AppCompatActivity {
                     selectionArgs);
             db.close();
 
+            //automatically generate some matches depending on the tournament type
             generateMatches();
 
+            //start activity for viewing the tournament
             Intent intent = new Intent(this, ViewTournament.class);
             intent.putExtra("tournamentID", tournamentID);
             intent.putExtra("type",tournamentType);
             startActivity(intent);
         }else{
-            displayMessage("You must have at least 2 teams to start a tournament");
+            DialogHelper.makeLongToast(this,"You must have at least 2 teams to start a tournament");
         }
     }
 
@@ -213,14 +211,13 @@ public class AddTeamActivity extends AppCompatActivity {
         ArrayList<Match> matches = new ArrayList<>();
         //create matches
         if(tournamentType.equals(Tournament.ROUND_ROBIN)){
-            //generate all matches
+            //generate all round robin matches
             for(int i = 0; i < teams.size()-1; i++){
                 for(int j = i + 1; j < teams.size(); j++){
                     matches.add(new Match(teams.get(i),teams.get(j)));
                 }
             }
         }else if(tournamentType.equals(Tournament.KNOCK_OUT)){
-
             //randomize team order
             Collections.shuffle(teams);
             //add byes until power of 2 is reached
@@ -233,7 +230,7 @@ public class AddTeamActivity extends AppCompatActivity {
                 matches.add(new Match(teams.get(i),teams.get(i+1)));
             }
         }else if(tournamentType.equals(Tournament.COMBINATION)){
-            //too complicated
+            //too complicated for now
             //let user create matches manually
         }
         //randomize match order
@@ -260,11 +257,14 @@ public class AddTeamActivity extends AppCompatActivity {
     }
 
     private int getNextTwoPower(int num){
-        double y = Math.floor(Math.log(num-0.00001) / Math.log(2));
+        //find lowest power of 2 that the number is greater than or equal to
+        double y = Math.floor(Math.log(num - 0.00001) / Math.log(2));
+        //return the next power of 2
         return (int)Math.pow(2, y + 1);
     }
 
     private void loadTeamList(){
+        //Query database for the list of teams
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String[] projection = {TournamentContract.TournamentEntry.COLUMN_NAME_TEAMS};
         String[] selectionArgs = {""+tournamentID};
@@ -281,8 +281,10 @@ public class AddTeamActivity extends AppCompatActivity {
             try {
                 String teamString = c.getString(c.getColumnIndex(TournamentContract.TournamentEntry.COLUMN_NAME_TEAMS));
                 if(teamString!=null) {
+                    //teams are stored in a JSON object
                     JSONObject json = new JSONObject(teamString);
                     JSONArray teamsArray = json.optJSONArray("teams");
+                    //populate the teams list with values from the JSON array
                     for (int i = 0; i < teamsArray.length(); i++) {
                         addTeam(teamsArray.getString(i));
                     }
@@ -297,18 +299,14 @@ public class AddTeamActivity extends AppCompatActivity {
 
     private void addTeam(String team) {
         adapter.add(team);
-        if(teams.size()>1)
+        if(teams.size()>1)//ensures that a tournament cannot be started if it does not have enough teams
             findViewById(R.id.startTournamentButton).setEnabled(true);
     }
 
     private void removeTeam(String string){
         adapter.remove(string);
-        if(teams.size()<2)
+        if(teams.size()<2)//ensures that a tournament cannot be started if it does not have enough teams
             findViewById(R.id.startTournamentButton).setEnabled(false);
-    }
-
-    private void displayMessage(String message){
-        Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
     }
 
     private void setRemoveButtonEnabled(boolean isEnabled){
@@ -316,10 +314,11 @@ public class AddTeamActivity extends AppCompatActivity {
     }
 
     public void deleteTournament(View view){
+        //create dialog to confirm deletion
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Deleting tournament");
         builder.setMessage("Are you sure you want to delete this tournament?");
-// Add the buttons
+        // Add the buttons
         builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 deleteTournament();
@@ -332,17 +331,19 @@ public class AddTeamActivity extends AppCompatActivity {
         });
         builder.show();
     }
+
     private void deleteTournament(){
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String selection = TournamentContract.TournamentEntry._ID + " = ?";
         String[] selectionArgs = { tournamentID+"" };
         String selection2 = TournamentContract.MatchEntry.COLUMN_NAME_TOURNAMENT_ID + " = ?";
         String[] selectionArgs2 = { tournamentID+"" };
-
+        //delete the tournament from the database
         db.delete(TournamentContract.TournamentEntry.TABLE_NAME, selection, selectionArgs);
+        //delete the matches associated with the tournament from the database
         db.delete(TournamentContract.MatchEntry.TABLE_NAME,selection2,selectionArgs2);
-
         db.close();
+        //return to the main activity
         Intent intent = new Intent(this,MainActivity.class);
         startActivity(intent);
     }

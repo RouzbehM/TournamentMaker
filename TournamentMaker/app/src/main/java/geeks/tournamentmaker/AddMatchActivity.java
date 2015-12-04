@@ -1,54 +1,52 @@
 package geeks.tournamentmaker;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class AddMatchActivity extends ActionBarActivity {
     private TournamentDBHelper dbHelper;
-    Button add;
-    int tournamentID;
+    private int tournamentID;
     private ArrayList teams = new ArrayList();
     private Spinner spinner1;
     private Spinner spinner2;
-    EditText score1;
-    EditText score2;
+    private EditText score1;
+    private EditText score2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_match);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        //get the EditTexts used for entering the scores
         score1 = (EditText)findViewById(R.id.team1score);
         score2 = (EditText)findViewById(R.id.team2score);
+
+        //get the Spinners used for selecting teams
         spinner1 = (Spinner) findViewById(R.id.team1spinner);
         spinner2 = (Spinner) findViewById(R.id.team2spinner);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        //get tournament info
         Intent intent = getIntent();
         tournamentID = intent.getIntExtra("tournamentID", 0);
-        add = (Button)findViewById(R.id.addbtn);
 
+        //get the list of teams for the current tournament
         dbHelper = new TournamentDBHelper(this);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String[] projection = {TournamentContract.TournamentEntry.COLUMN_NAME_TEAMS};
@@ -63,13 +61,15 @@ public class AddMatchActivity extends ActionBarActivity {
                 null
         );
 
-        if (c.moveToFirst()) {
+        if (c.moveToFirst()) {//cursor is not empty
             try {
                 String teamString = c.getString(c.getColumnIndex(TournamentContract.TournamentEntry.COLUMN_NAME_TEAMS));
                 if(teamString!=null) {
+                    //The teams array is stored as a JSON object
                     JSONObject json = new JSONObject(teamString);
                     JSONArray teamsArray = json.optJSONArray("teams");
                     for (int i = 0; i < teamsArray.length(); i++) {
+                        //populate the list used for keeping track of all the teams
                         teams.add(teamsArray.getString(i));
                     }
                 }
@@ -80,29 +80,25 @@ public class AddMatchActivity extends ActionBarActivity {
         }
         db.close();
 
+        //set the adapter that populates the Spinners for selecting teams
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
                 this, android.R.layout.simple_spinner_item, teams);
         spinnerArrayAdapter.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item );
-
         spinner1.setAdapter(spinnerArrayAdapter);
         spinner2.setAdapter(spinnerArrayAdapter);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+        //add menu items
         getMenuInflater().inflate(R.menu.menu_add_match, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if(id == R.id.action_help){
             Intent intent = new Intent(this, ViewHelp.class);
             startActivity(intent);
@@ -118,6 +114,7 @@ public class AddMatchActivity extends ActionBarActivity {
     }
     @Override
     public void onBackPressed(){
+        //return to viewing the current tournament details
         Intent intent = new Intent(this, ViewTournament.class);
         intent.putExtra("tournamentID",tournamentID);
         startActivity(intent);
@@ -125,59 +122,45 @@ public class AddMatchActivity extends ActionBarActivity {
 
     public void onClick(View v)
     {
-        String firstteam = spinner1.getSelectedItem().toString();
-        String secondteam = spinner2.getSelectedItem().toString();
+        //get teams selected by user
+        String firstTeam = spinner1.getSelectedItem().toString();
+        String secondTeam = spinner2.getSelectedItem().toString();
 
-
-        if (firstteam.equals("") || secondteam.equals(""))
+        if (firstTeam.equals("") || secondTeam.equals(""))
         {
-            CharSequence text = "Missing Fields";
-            int duration = Toast.LENGTH_LONG;
-
-            Toast toast = Toast.makeText(this, text, duration);
-            toast.show();
-        }else if(firstteam.equals(secondteam)){
-            CharSequence text = "Please select 2 different teams";
-            int duration = Toast.LENGTH_LONG;
-
-            Toast toast = Toast.makeText(this, text, duration);
-            toast.show();
+            DialogHelper.makeLongToast(this,"Missing Fields");
+        }else if(firstTeam.equals(secondTeam)){
+            DialogHelper.makeLongToast(this,"Please select 2 different teams");
         }
         else
         {
             // Gets the data repository in write mode
             SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-// Create a new map of values, where column names are the keys
+            // Create a new map of values, where column names are the keys
             ContentValues values = new ContentValues();
             values.put(TournamentContract.MatchEntry.COLUMN_NAME_TOURNAMENT_ID, tournamentID);
-            values.put(TournamentContract.MatchEntry.COLUMN_NAME_TEAM1,firstteam);
-            values.put(TournamentContract.MatchEntry.COLUMN_NAME_TEAM2,secondteam);
+            values.put(TournamentContract.MatchEntry.COLUMN_NAME_TEAM1,firstTeam);
+            values.put(TournamentContract.MatchEntry.COLUMN_NAME_TEAM2,secondTeam);
             String scoreTeam1 = score1.getText().toString();
             String scoreTeam2 = score2.getText().toString();
             if(!scoreTeam1.equals("")&&!scoreTeam2.equals("")) {
                 values.put(TournamentContract.MatchEntry.COLUMN_NAME_SCORE1, score1.getText().toString());
                 values.put(TournamentContract.MatchEntry.COLUMN_NAME_SCORE2, score2.getText().toString());
                 if(Integer.parseInt(scoreTeam1)>Integer.parseInt(scoreTeam2)){
-                    values.put(TournamentContract.MatchEntry.COLUMN_NAME_WINNER, firstteam);
+                    values.put(TournamentContract.MatchEntry.COLUMN_NAME_WINNER, firstTeam);
                 } else {
-                    values.put(TournamentContract.MatchEntry.COLUMN_NAME_WINNER, secondteam);
+                    values.put(TournamentContract.MatchEntry.COLUMN_NAME_WINNER, secondTeam);
                 }
             }
 
+            // Insert new match into the database
+            db.insert(TournamentContract.MatchEntry.TABLE_NAME,null,values);
 
-// Insert the new row, returning the primary key value of the new row
-            long newRowId;
-            newRowId = db.insert(
-                    TournamentContract.MatchEntry.TABLE_NAME,null,values);
-
-
+            //return to viewing the current tournament details
             Intent myIntent = new Intent(this, ViewTournament.class);
             myIntent.putExtra("tournamentID", tournamentID);
             startActivity(myIntent);
-
         }
-
-
     }
 }

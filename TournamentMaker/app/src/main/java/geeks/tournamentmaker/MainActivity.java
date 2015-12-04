@@ -11,19 +11,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
+
 import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -44,11 +35,10 @@ public class MainActivity extends ActionBarActivity {
 
     @Override
     public void onBackPressed(){
-
+        //make back button do nothing;
     }
 
     public void createTournament(View view){
-
         Intent intent = new Intent(this, AddTournament.class);
         startActivity(intent);
 
@@ -56,19 +46,15 @@ public class MainActivity extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+        // Add menu items.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if(id == R.id.action_help){
             Intent intent = new Intent(this, ViewHelp.class);
             startActivity(intent);
@@ -78,19 +64,14 @@ public class MainActivity extends ActionBarActivity {
             startActivity(intent);
         }
 
-
         return super.onOptionsItemSelected(item);
     }
 
     private void loadTournamentList(){
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor c = db.rawQuery("SELECT * FROM " + TournamentContract.TournamentEntry.TABLE_NAME,null);
-
-        // Find ListView to populate
-        ListView tournamentList = (ListView)findViewById(R.id.tournamentView);
-        // Setup cursor adapter using cursor from last step
+        // Setup cursor adapter for populating tournament list
         LoadTournamentCursorAdapter loadTournamentAdapter = new LoadTournamentCursorAdapter(this, c, 0);
-        // Attach cursor adapter to the ListView
         tournamentList.setAdapter(loadTournamentAdapter);
     }
 }
@@ -107,21 +88,24 @@ public class MainActivity extends ActionBarActivity {
      }
 
      public void bindView(View view, Context context, Cursor cursor) {
-         // Find fields to populate in inflated template
+         // Get the tournament list item
          TextView tournamentList = (TextView) view.findViewById(R.id.list_item_text);
-         // Extract properties from cursor
+         // Extract tournament info from cursor
          String body = cursor.getString(cursor.getColumnIndexOrThrow(TournamentContract.TournamentEntry.COLUMN_NAME_NAME));
          final int tournamentID = cursor.getInt(cursor.getColumnIndex(TournamentContract.TournamentEntry._ID));
          final String status = cursor.getString(cursor.getColumnIndex(TournamentContract.TournamentEntry.COLUMN_NAME_STATUS));
          final String type = cursor.getString(cursor.getColumnIndex(TournamentContract.TournamentEntry.COLUMN_NAME_TYPE));
-         // Populate fields with extracted properties
+         // Populate tournament list item
          tournamentList.setText(body);
+         //start another activity when the list item is pressed
          tournamentList.setOnClickListener(new View.OnClickListener(){
              public void onClick(View view){
                  Intent intent = new Intent();
                  if(status.equals(Tournament.STARTED)) {
+                     //activity for viewing tournament details
                      intent = new Intent(view.getContext(), ViewTournament.class);
                  }else if(status.equals(Tournament.NOT_STARTED)){
+                     //activity for adding teams
                      intent = new Intent(view.getContext(), AddTeamActivity.class);
                  }
                  intent.putExtra("tournamentID", tournamentID);
