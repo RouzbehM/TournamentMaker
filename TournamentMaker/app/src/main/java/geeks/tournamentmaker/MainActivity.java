@@ -23,6 +23,9 @@ public class MainActivity extends ActionBarActivity {
     private ListView tournamentList;
 
     @Override
+    /**
+     * creates the main activity showing the list of tournaments that have already been created
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -67,6 +70,9 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * loads the list of tournaments that have been created
+     */
     private void loadTournamentList(){
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor c = db.rawQuery("SELECT * FROM " + TournamentContract.TournamentEntry.TABLE_NAME,null);
@@ -75,6 +81,8 @@ public class MainActivity extends ActionBarActivity {
         tournamentList.setAdapter(loadTournamentAdapter);
     }
 }
+
+
  class LoadTournamentCursorAdapter extends CursorAdapter{
      public LoadTournamentCursorAdapter(Context context, Cursor cursor, int flags) {
          super(context, cursor, 0);

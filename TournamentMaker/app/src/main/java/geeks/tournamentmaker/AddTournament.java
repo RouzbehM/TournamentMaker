@@ -73,6 +73,10 @@ public class AddTournament extends ActionBarActivity {
     TournamentDBHelper mDbHelper = new TournamentDBHelper(AddTournament.this);
 
     @Override
+    /**
+     * Creates a spinner to specify what kind of tournament will be made, and a button to confirm
+     * the creation of a tournament
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_tournament);
@@ -86,6 +90,10 @@ public class AddTournament extends ActionBarActivity {
         typespinner.setAdapter(adapter);
     }
 
+    /**
+     * Creates a tournament with its own name and type.
+     * @param v the view that was clicked
+     */
     public void onClick(View v)
     {
             EditText tournamentname = (EditText)findViewById(R.id.Message1Box);

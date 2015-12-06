@@ -24,6 +24,9 @@ public class ViewStandingsActivity extends ActionBarActivity {
     int tournamentID;
 
     @Override
+    /**
+     * Creates a listView to display the team standings in a specific tournament
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_standings);
@@ -110,6 +113,9 @@ public class ViewStandingsActivity extends ActionBarActivity {
             winners.add(s);
     }
 
+    /**
+     * Loads the standings from the database
+     */
     private void loadStandings()
     {
         SQLiteDatabase db = dbHelper.getReadableDatabase();

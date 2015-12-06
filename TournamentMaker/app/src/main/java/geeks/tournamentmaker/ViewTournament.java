@@ -21,6 +21,10 @@ public class ViewTournament extends ActionBarActivity {
     private Cursor cursor;
 
     @Override
+    /**
+     * Creates the activity to view the tournament.
+     */
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_tournament);
@@ -92,12 +96,20 @@ public class ViewTournament extends ActionBarActivity {
         ((ViewGroup)view.getParent()).removeView(view);
     }
 
+    /**
+     * Creates a new match for the tournament
+     * @param view the view that was clicked
+     */
     public void createMatch(View view){
         Intent intent = new Intent(this,AddMatchActivity.class);
         intent.putExtra("tournamentID", tournamentID);
         startActivity(intent);
     }
 
+    /**
+     * Views the standings of the tournament
+     * @param view the view that was clicked
+     */
     public void viewStandings(View view){
         Intent intent = new Intent(this,ViewStandingsActivity.class);
         intent.putExtra("tournamentID", tournamentID);
@@ -124,6 +136,9 @@ public class ViewTournament extends ActionBarActivity {
         builder.show();
     }
 
+    /**
+     * deletes the specified tournament
+     */
     private void deleteTournament(){
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
@@ -144,6 +159,9 @@ public class ViewTournament extends ActionBarActivity {
         startActivity(intent);
     }
 
+    /**
+     * Loads the matches of the tournament from the database
+     */
     private void loadMatches(){
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         //Query database for all matches with the provided tournament ID

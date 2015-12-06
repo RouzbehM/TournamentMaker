@@ -29,6 +29,11 @@ public class AddMatchActivity extends ActionBarActivity {
     private EditText score2;
 
     @Override
+    /**
+     * The onCreate method for this activity creates EditTexts for each teams score for the specific
+     * match, then will create spinners to identify which two teams are playing
+     *
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_match);
@@ -120,6 +125,12 @@ public class AddMatchActivity extends ActionBarActivity {
         startActivity(intent);
     }
 
+    /**
+     * The onClick method for this activity reads which two teams the user selected to play in
+     * the match, then inserts the new match into the database
+     *
+     * @param v the view that was clicked
+     */
     public void onClick(View v)
     {
         //get teams selected by user
