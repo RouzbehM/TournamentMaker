@@ -6,6 +6,9 @@ import android.widget.ImageView;
 
 import geeks.tournamentmaker.R;
 
+/**
+ * The ViewStandings class displays instructions on how to view the standings for a tournament.
+ */
 public class ViewStandings extends ActionBarActivity {
 
     private ImageView mImageView;

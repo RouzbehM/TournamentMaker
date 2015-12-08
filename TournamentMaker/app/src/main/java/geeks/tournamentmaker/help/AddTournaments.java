@@ -6,6 +6,9 @@ import android.widget.ImageView;
 
 import geeks.tournamentmaker.R;
 
+/**
+ * The AddTournaments class displays instructions on how to create new tournaments.
+ */
 public class AddTournaments extends ActionBarActivity {
 
     private ImageView mImageView;

@@ -6,6 +6,9 @@ import android.widget.ImageView;
 
 import geeks.tournamentmaker.R;
 
+/**
+ * The ViewAddResults class displays instructions on how to add match results to a tournament.
+ */
 public class ViewAddResults extends ActionBarActivity{
 
 private ImageView mImageView;

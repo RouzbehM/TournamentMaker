@@ -6,6 +6,9 @@ import android.widget.ImageView;
 
 import geeks.tournamentmaker.R;
 
+/**
+ * The RemoveTournaments class displays instructions on how to delete tournaments.
+ */
 public class RemoveTournament extends ActionBarActivity {
 
     private ImageView mImageView;

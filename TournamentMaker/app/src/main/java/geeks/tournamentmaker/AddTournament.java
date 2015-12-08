@@ -17,6 +17,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+/**
+ * The Tournament class is used for storing tournament details.
+ */
 class Tournament{
     String tournamentname;
     String tournamentstatus;

@@ -3,7 +3,7 @@ package geeks.tournamentmaker;
 import android.provider.BaseColumns;
 
 /**
- * Created by Oliver on 12/1/2015.
+ * The TournamentContract class is used for defining database tables for the app.
  */
 public final class TournamentContract {
     public TournamentContract(){}

@@ -6,6 +6,9 @@ import android.widget.ImageView;
 
 import geeks.tournamentmaker.R;
 
+/**
+ * The ViewTeams class displays instructions on how to add and remove teams from a tournament.
+ */
 public class ViewTeams extends ActionBarActivity {
     private ImageView mImageView;
     @Override

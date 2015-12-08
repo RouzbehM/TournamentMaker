@@ -10,7 +10,7 @@ import android.widget.CursorAdapter;
 import android.widget.TextView;
 
 /**
- * Created by Oliver on 12/2/2015.
+ * The MatchCursorAdapter class is used for populating match list items.
  */
 public class MatchCursorAdapter extends CursorAdapter {
     public MatchCursorAdapter(Context context, Cursor cursor, int flags) {

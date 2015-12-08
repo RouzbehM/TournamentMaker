@@ -16,7 +16,10 @@ import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-
+/**
+ * The MainActivity class displays a list of tournaments that the user has created.
+ * The user is able to select a tournament to view its details and to add a new tournament.
+ */
 public class MainActivity extends ActionBarActivity {
 
     private TournamentDBHelper dbHelper;
@@ -83,6 +86,9 @@ public class MainActivity extends ActionBarActivity {
 }
 
 
+/**
+ * The LoadTournamentCursorAdapter class is used for populating tournament list items.
+ */
  class LoadTournamentCursorAdapter extends CursorAdapter{
      public LoadTournamentCursorAdapter(Context context, Cursor cursor, int flags) {
          super(context, cursor, 0);

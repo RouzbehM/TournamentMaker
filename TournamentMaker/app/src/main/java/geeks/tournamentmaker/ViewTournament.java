@@ -13,6 +13,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+/**
+ * The ViewTournament activity is used for viewing the details of a selected tournament.
+ * The activity shows a list of all the matches for the tournament and allows the user to
+ * view current tournament standings, to add new matches, and to delete the tournament.
+ */
 public class ViewTournament extends ActionBarActivity {
 
     private int tournamentID;

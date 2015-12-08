@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 /**
- * Created by Oliver on 12/1/2015.
+ * The TournamentDBHelper class is used for assisting with database operations.
  */
 public class TournamentDBHelper extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 1;

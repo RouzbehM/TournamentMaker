@@ -1,7 +1,7 @@
 package geeks.tournamentmaker;
 
 /**
- * Created by Oliver on 12/2/2015.
+ * The Match class is used to store information about a tournament match.
  */
 public class Match {
     private String team1;

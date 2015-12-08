@@ -15,6 +15,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * The ViewStandingsActivity class displays a list of teams for a
+ * selected tournament along with the number of wins they have.
+ * Currently, teams without wins will not be displayed.
+ */
 public class ViewStandingsActivity extends ActionBarActivity {
     private TournamentDBHelper dbHelper;
     private ListView standings;

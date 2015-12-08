@@ -11,6 +11,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
+/**
+ * The EnterMatchResults activity allows users to enter the scores for a selected match.
+ */
 public class EnterMatchResults extends ActionBarActivity {
 
     private TournamentDBHelper dbHelper;

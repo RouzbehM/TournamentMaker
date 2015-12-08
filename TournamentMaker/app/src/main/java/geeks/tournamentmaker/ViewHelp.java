@@ -7,6 +7,9 @@ import android.view.View;
 
 import geeks.tournamentmaker.help.*;
 
+/**
+ * The ViewHelp activity displays a series of help topics that the user can view.
+ */
 public class ViewHelp extends ActionBarActivity {
 
     @Override
